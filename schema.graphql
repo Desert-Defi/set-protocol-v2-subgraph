@@ -1,0 +1,24 @@
+type Asset @entity {
+  id: ID!
+  name: String!
+  symbol: String!
+  address: String!
+  decimals: Int!
+}
+
+type Component @entity {
+  id: ID!
+  asset: Asset!
+  units: BigInt!
+  setToken: SetToken!
+}
+
+type SetToken @entity {
+  id: ID!
+  name: String!
+  symbol: String!
+  address: String!
+  inception: BigInt!
+  manager: String!
+  components: [Component!] @derivedFrom(field: "setToken")
+}

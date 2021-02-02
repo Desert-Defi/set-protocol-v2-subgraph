@@ -1,0 +1,28 @@
+{
+  "name": "set-protocol-v2-subgraph",
+  "version": "0.1.0",
+  "repository": "https://github.com/desert-defi/set-protocol-v2-subgraph",
+  "license": "MIT",
+  "scripts": {
+    "create": "graph create set-protocol-v2-subgraph --node https://api.thegraph.com/deploy/",
+    "create-local": "graph create set-protocol-v2-subgraph --node http://127.0.0.1:8020",
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy set-protocol-v2-subgraph --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
+    "deploy-local": "graph deploy set-protocol-v2-subgraph --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
+    "lint": "prettier --write --loglevel warn 'src/**/*.{js,ts}' ",
+    "generate-abis": "bash scripts/generate-abis.bash"
+  },
+  "devDependencies": {
+    "@graphprotocol/graph-cli": "^0.19.0",
+    "@graphprotocol/graph-ts": "^0.19.0",
+    "prettier": "^2.2.1"
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.26.0",
+    "babel-register": "^6.26.0",
+    "truffle": "^5.0.4",
+    "truffle-contract": "^4.0.5",
+    "truffle-hdwallet-provider": "^1.0.4"
+  }
+}

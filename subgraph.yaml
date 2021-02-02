@@ -1,0 +1,71 @@
+specVersion: 0.1.0
+description: Set Protocol V2
+repository: https://github.com/desert-defi-set-protocol-v2-subgraph
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: Controller
+    network: mainnet
+    source:
+      address: '0xa4c8d221d8BB851f83aadd0223a8900A6921A349'
+      abi: Controller
+      startBlock: 10830495
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - SetTokenFactory
+      abis:
+        - name: Controller
+          file: ./abis/Controller.json
+      eventHandlers:
+        - event: FactoryAdded(indexed address)
+          handler: handleFactoryAdded
+        - event: FactoryRemoved(indexed address)
+          handler: handleFactoryRemoved
+      file: ./src/mappings/Controller.ts
+templates:
+  - name: SetTokenCreator
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: SetTokenCreator
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappings/SetTokenCreator.ts
+      entities:
+        - SetToken
+      abis:
+        - name: SetTokenCreator
+          file: ./abis/SetTokenCreator.json
+      eventHandlers:
+        - event: SetTokenCreated(indexed address,address,string,string)
+          handler: handleSetTokenCreated
+  - name: SetToken
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: SetToken
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappings/SetToken.ts
+      entities:
+        - Asset
+      abis:
+        - name: SetToken
+          file: ./abis/SetToken.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: ERC20_bytes32
+          file: ./abis/ERC20_bytes32.json
+      eventHandlers:
+        - event: ComponentAdded(indexed address)
+          handler: handleComponentAdded
+        - event: ComponentRemoved(indexed address)
+          handler: handleComponentRemoved
