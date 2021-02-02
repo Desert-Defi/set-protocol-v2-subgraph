@@ -4,8 +4,8 @@ import { SetToken } from '../../generated/schema';
 
 export function handleSetTokenCreated(event: SetTokenCreated): void {
   SetTokenTemplate.create(event.address);
-  const id = event.params._setToken.toString();
-  const st = new SetToken(id);
+  let id = event.params._setToken.toString();
+  let st = new SetToken(id);
   st.inception = event.block.timestamp;
   st.manager = event.params._manager.toString();
   st.name = event.params._name;

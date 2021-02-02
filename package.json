@@ -1,15 +1,15 @@
 {
   "name": "set-protocol-v2-subgraph",
   "version": "0.1.0",
-  "repository": "https://github.com/desert-defi/set-protocol-v2-subgraph",
+  "repository": "https://github.com/Desert-Defi/set-protocol-v2-subgraph",
   "license": "MIT",
   "scripts": {
-    "create": "graph create set-protocol-v2-subgraph --node https://api.thegraph.com/deploy/",
-    "create-local": "graph create set-protocol-v2-subgraph --node http://127.0.0.1:8020",
+    "create": "graph create desert-defi/setprotocolv2 --node https://api.thegraph.com/deploy/",
+    "create-local": "graph create desert-defi/setprotocolv2 --node http://127.0.0.1:8020",
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy set-protocol-v2-subgraph --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
-    "deploy-local": "graph deploy set-protocol-v2-subgraph --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
+    "deploy": "graph deploy desert-defi/setprotocolv2 --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
+    "deploy-local": "graph deploy desert-defi/setprotocolv2 --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
     "lint": "prettier --write --loglevel warn 'src/**/*.{js,ts}' ",
     "generate-abis": "bash scripts/generate-abis.bash"
   },
