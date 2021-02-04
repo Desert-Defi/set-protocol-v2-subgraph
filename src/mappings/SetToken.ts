@@ -7,12 +7,12 @@ import { SetToken, Component } from '../../generated/schema';
 import { useAsset } from '../entities/Asset';
 
 export function handleComponentAdded(event: ComponentAdded): void {
-  let st = SetToken.load(event.address.toString());
+  let st = SetToken.load(event.address.toHexString());
   if (st == null) {
     log.warning('SetToken not found for {}', [event.address.toString()]);
     return;
   }
-  let asset = useAsset(event.params._component.toString());
+  let asset = useAsset(event.params._component.toHexString());
   let c = new Component(st.id + '/' + asset.id);
   c.asset = asset.id;
   c.setToken = st.id;
@@ -21,12 +21,12 @@ export function handleComponentAdded(event: ComponentAdded): void {
 }
 
 export function handleComponentRemoved(event: ComponentRemoved): void {
-  let st = SetToken.load(event.address.toString());
+  let st = SetToken.load(event.address.toHexString());
   if (st == null) {
-    log.warning('SetToken not found for {}', [event.address.toString()]);
+    log.warning('SetToken not found for {}', [event.address.toHexString()]);
     return;
   }
-  let id = st.id + '/' + event.params._component.toString();
+  let id = st.id + '/' + event.params._component.toHexString();
   let c = Component.load(id);
   if (c == null) {
     log.warning('Component not found for {}', [id]);

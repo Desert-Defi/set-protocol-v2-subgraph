@@ -11,7 +11,8 @@
     "deploy": "graph deploy desert-defi/setprotocolv2 --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
     "deploy-local": "graph deploy desert-defi/setprotocolv2 --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
     "lint": "prettier --write --loglevel warn 'src/**/*.{js,ts}' ",
-    "generate-abis": "bash scripts/generate-abis.bash"
+    "generate-abis": "bash scripts/generate-abis.bash",
+    "deploy-to": "bash scripts/deploy-to.bash"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "^0.19.0",

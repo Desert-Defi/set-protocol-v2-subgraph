@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Downloads Set Protocol V2 contracts and generates ABI files
 
 wd="$(pwd)"
 

@@ -4,34 +4,13 @@ repository: https://github.com/Desert-Defi/set-protocol-v2-subgraph
 schema:
   file: ./schema.graphql
 dataSources:
-  - kind: ethereum/contract
-    name: Controller
-    network: mainnet
-    source:
-      address: '0xa4c8d221d8BB851f83aadd0223a8900A6921A349'
-      abi: Controller
-      startBlock: 10830495
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      entities:
-        - SetTokenFactory
-      abis:
-        - name: Controller
-          file: ./abis/Controller.json
-      eventHandlers:
-        - event: FactoryAdded(indexed address)
-          handler: handleFactoryAdded
-        - event: FactoryRemoved(indexed address)
-          handler: handleFactoryRemoved
-      file: ./src/mappings/Controller.ts
-templates:
   - name: SetTokenCreator
     kind: ethereum/contract
     network: mainnet
     source:
       abi: SetTokenCreator
+      address: '0x65d103A810099193c892a23d6b320cF3B9E30D46'
+      startBlock: 10830495
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -42,9 +21,16 @@ templates:
       abis:
         - name: SetTokenCreator
           file: ./abis/SetTokenCreator.json
+        - name: SetToken
+          file: ./abis/SetToken.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: ERC20_bytes32
+          file: ./abis/ERC20_bytes32.json
       eventHandlers:
         - event: SetTokenCreated(indexed address,address,string,string)
           handler: handleSetTokenCreated
+templates:
   - name: SetToken
     kind: ethereum/contract
     network: mainnet

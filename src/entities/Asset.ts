@@ -4,7 +4,7 @@ import { ERC20 } from '../../generated/templates/SetToken/ERC20';
 import { ERC20_bytes32 } from '../../generated/templates/SetToken/ERC20_bytes32';
 
 export function useAsset(address: string): Asset {
-  let asset = Asset.load(address.toString()) as Asset;
+  let asset = Asset.load(address) as Asset;
   if (asset != null) {
     return asset;
   }
@@ -22,7 +22,7 @@ export function useAsset(address: string): Asset {
   if (nameCall.reverted) {
     // try bytes32 ERC20
     let contract2 = ERC20_bytes32.bind(Address.fromString(address));
-    let nameCall2 = contract.try_name();
+    let nameCall2 = contract2.try_name();
     if (nameCall2.reverted) log.warning('name() call reverted for {}', [address]);
     name = nameCall2.value.toString();
     let symbolCall = contract2.try_symbol();

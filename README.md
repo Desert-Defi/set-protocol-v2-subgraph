@@ -3,30 +3,41 @@
 ## Install
 
 1. `yarn install`
-2. (If deploying to hosted service) `yarn graph auth https://api.thegraph.com/deploy/ <ACCESS_TOKEN>`
-3. (If Set Protocol contract ABI changed) `yarn generate-abis`
+2. `yarn codegen`
+3. (If deploying to hosted service) `yarn graph auth https://api.thegraph.com/deploy/ <ACCESS_TOKEN>`
+4. (If Set Protocol contract ABI changed) `yarn generate-abis`
 
 ## Commands
 
+Generate types (if schema or ABI changed):
+
+`yarn codegen`
+
+Compile subgraph:
+
 `yarn build`
 
-Compile subgraph
+Deploy to hosted service:
 
 `yarn deploy`
 
-Deploy to hosted service
+Deploy to localhost Graph node:
+
+`yarn create-local` if first time, then:
 
 `yarn deploy-local`
 
-Deploy to local Graph node
+Deploy to Graph node by IP:
+
+`yarn deploy-to <IP>`
+
+Format code:
 
 `yarn lint`
 
-Format code
+Pull contract ABIs from Set Protocol V2 repo (only needed if changed):
 
 `yarn generate-abis`
-
-Pull contract ABIs from Set Protocol V2 repo (only needed if changed)
 
 ## Reference
 
@@ -43,3 +54,23 @@ Pull contract ABIs from Set Protocol V2 repo (only needed if changed)
 [Set Protocol System Diagram](https://drive.google.com/file/d/15ETEqxkjkR29GmWH4gg4ob_OW9lb_Nly/view)
 
 [Hosted API](https://thegraph.com/explorer/subgraph/desert-defi/setprotocolv2)
+
+## Development
+
+### Local Graph Node
+
+Set up Turbogeth (min 1.5TB SSD free space):
+
+1. `git clone -q --depth=1 https://github.com/ledgerwatch/turbo-geth.git && cd turbo-geth`
+2. `sudo docker-compose build`
+3. `sudo XDG_DATA_HOME=/preferred/data/folder docker-compose up -d`
+
+Set up Graph Node
+
+1. `git clone -q --depth=1 https://github.com/graphprotocol/graph-node.git && cd graph-node/docker`
+2. `sudo bash setup.sh`
+3. `sudo docker-compose up -d`
+
+Watch logs:
+
+`sudo docker logs $(sudo docker container ls | grep graph-node | cut -d' ' -f1) -f --since 10m`
