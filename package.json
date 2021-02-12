@@ -4,26 +4,56 @@
   "repository": "https://github.com/Desert-Defi/set-protocol-v2-subgraph",
   "license": "MIT",
   "scripts": {
-    "create": "graph create desert-defi/setprotocolv2 --node https://api.thegraph.com/deploy/",
+    "create-hosted": "graph create desert-defi/setprotocolv2 --node https://api.thegraph.com/deploy/",
     "create-local": "graph create desert-defi/setprotocolv2 --node http://127.0.0.1:8020",
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy desert-defi/setprotocolv2 --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
-    "deploy-local": "graph deploy desert-defi/setprotocolv2 --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
-    "lint": "prettier --write --loglevel warn 'src/**/*.{js,ts}' ",
+    "deploy-hosted": "graph deploy desert-defi/setprotocolv2 --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
+    "deploy-local": "yarn create-local && graph deploy desert-defi/setprotocolv2 --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
+    "lint": "prettier --write --loglevel warn '@(scripts|templates|src)/**/*.@(ts|js|graphql|yaml)' './*.@(ts|js|graphql|yaml)' && eslint '@(scripts|templates|src)/**/*.@(ts|js)' --fix",
     "generate-abis": "bash scripts/generate-abis.bash",
-    "deploy-to": "bash scripts/deploy-to.bash"
+    "deploy-to": "bash scripts/deploy-to.bash",
+    "prepare": "yarn codegen",
+    "start-hardhat": "bash scripts/start-hardhat.bash"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "^0.19.0",
-    "@graphprotocol/graph-ts": "^0.19.0",
-    "prettier": "^2.2.1"
+    "@shopify/eslint-plugin-assemblyscript": "^0.1.13",
+    "@typescript-eslint/eslint-plugin": "^4.14.2",
+    "@typescript-eslint/parser": "^4.14.2",
+    "eslint": "^7.19.0",
+    "eslint-config-prettier": "^7.2.0",
+    "hardhat": "^2.0.9",
+    "husky": "^4.3.8",
+    "lint-staged": "^10.5.3",
+    "prettier": "^2.2.1",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.1.3"
   },
   "dependencies": {
+    "@graphprotocol/graph-ts": "^0.19.0",
     "babel-polyfill": "^6.26.0",
     "babel-register": "^6.26.0",
+    "dotenv": "^8.2.0",
     "truffle": "^5.0.4",
     "truffle-contract": "^4.0.5",
     "truffle-hdwallet-provider": "^1.0.4"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn lint-staged -v"
+    }
+  },
+  "lint-staged": {
+    "@(scripts|templates|src)/**/*.@(ts|js)": [
+      "eslint --fix",
+      "prettier --write --loglevel warn"
+    ],
+    "@(scripts|templates|src)/**/*.@(graphql|yaml)": [
+      "prettier --write --loglevel warn"
+    ],
+    "./*.@(graphql|yaml|ts|js)": [
+      "prettier --write --loglevel warn"
+    ]
   }
 }

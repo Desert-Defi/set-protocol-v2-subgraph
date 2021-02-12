@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # Deploys to supplied IP address
+# Run from parent folder
 
 IP="${1:?ERROR - missing IP}"
 

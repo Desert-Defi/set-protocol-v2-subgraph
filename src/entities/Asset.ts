@@ -1,5 +1,6 @@
 import { Asset } from '../../generated/schema';
-import { log, Address } from '@graphprotocol/graph-ts';
+import { Address } from '@graphprotocol/graph-ts';
+import { logCritical } from '../utils/logCritical';
 import { ERC20 } from '../../generated/templates/SetToken/ERC20';
 import { ERC20_bytes32 } from '../../generated/templates/SetToken/ERC20_bytes32';
 
@@ -15,7 +16,7 @@ export function useAsset(address: string): Asset {
   let decimals = 18;
 
   let decimalsCall = contract.try_decimals();
-  if (decimalsCall.reverted) log.warning('decimals() call reverted for {}', [address]);
+  if (decimalsCall.reverted) logCritical('decimals() call reverted for {}', [address]);
   decimals = decimalsCall.value;
 
   let nameCall = contract.try_name();
@@ -23,15 +24,15 @@ export function useAsset(address: string): Asset {
     // try bytes32 ERC20
     let contract2 = ERC20_bytes32.bind(Address.fromString(address));
     let nameCall2 = contract2.try_name();
-    if (nameCall2.reverted) log.warning('name() call reverted for {}', [address]);
+    if (nameCall2.reverted) logCritical('name() call reverted for {}', [address]);
     name = nameCall2.value.toString();
     let symbolCall = contract2.try_symbol();
-    if (symbolCall.reverted) log.warning('symbol() call reverted for {}', [address]);
+    if (symbolCall.reverted) logCritical('symbol() call reverted for {}', [address]);
     symbol = symbolCall.value.toString();
   } else {
     name = nameCall.value;
     let symbolCall = contract.try_symbol();
-    if (symbolCall.reverted) log.warning('symbol() call reverted for {}', [address]);
+    if (symbolCall.reverted) logCritical('symbol() call reverted for {}', [address]);
     symbol = symbolCall.value;
   }
 

@@ -13,6 +13,13 @@ type Component @entity {
   setToken: SetToken!
 }
 
+type Module @entity {
+  id: ID!
+  name: String!
+  address: String!
+  setTokens: [SetToken!]!
+}
+
 type SetToken @entity {
   id: ID!
   name: String!
@@ -20,5 +27,7 @@ type SetToken @entity {
   address: String!
   inception: BigInt!
   manager: String!
-  components: [Component!] @derivedFrom(field: "setToken")
+  totalSupply: BigInt!
+  components: [Component!]! @derivedFrom(field: "setToken")
+  modules: [Module!]! @derivedFrom(field: "setTokens")
 }

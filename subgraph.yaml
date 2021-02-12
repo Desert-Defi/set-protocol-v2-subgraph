@@ -4,6 +4,28 @@ repository: https://github.com/Desert-Defi/set-protocol-v2-subgraph
 schema:
   file: ./schema.graphql
 dataSources:
+  - name: Controller
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: Controller
+      address: '{{CONTROLLER}}'
+      startBlock: 10830495
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappings/Controller.ts
+      entities:
+        - Module
+      abis:
+        - name: Controller
+          file: ./abis/Controller.json
+      eventHandlers:
+        - event: ModuleAdded(indexed address)
+          handler: handleModuleAdded
+        - event: ModuleRemoved(indexed address)
+          handler: handleModuleRemoved
   - name: SetTokenCreator
     kind: ethereum/contract
     network: mainnet
@@ -43,6 +65,7 @@ templates:
       file: ./src/mappings/SetToken.ts
       entities:
         - Asset
+        - Component
       abis:
         - name: SetToken
           file: ./abis/SetToken.json
@@ -55,3 +78,11 @@ templates:
           handler: handleComponentAdded
         - event: ComponentRemoved(indexed address)
           handler: handleComponentRemoved
+        - event: ManagerEdited(address,address)
+          handler: handleManagerEdited
+        - event: DefaultPositionUnitEdited(indexed address,int256)
+          handler: handleDefaultPositionUnitEdited
+        - event: ExternalPositionUnitEdited(indexed address,indexed address,int256)
+          handler: handleExternalPositionUnitEdited
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer

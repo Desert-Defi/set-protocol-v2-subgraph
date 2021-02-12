@@ -1,6 +1,17 @@
 # Set Protocol V2 Subgraph
 
-## Install
+Indexer of Set Protocol v2 events. Built on [The Graph](https://thegraph.com/).
+
+## Setup
+
+Requirements:
+
+- [Node.js >= 14.0](https://nodejs.org/en/download/)
+- [Yarn >= 1.22](https://yarnpkg.com)
+- [Bash >= 5.0](https://gist.github.com/Rican7/44081a9806595704fa7b289c32fcd62c)
+- [Docker >= 19.0](https://www.docker.com/get-started).
+
+Steps:
 
 1. `yarn install`
 2. `yarn codegen`
@@ -9,35 +20,44 @@
 
 ## Commands
 
-Generate types (if schema or ABI changed):
+Usage:
 
-`yarn codegen`
+`yarn <COMMAND>`
 
-Compile subgraph:
+Commands:
 
-`yarn build`
+`codegen` - Generate types (if schema or ABI changed)
 
-Deploy to hosted service:
+`build` - Compile subgraph
 
-`yarn deploy`
+`deploy-local` - Deploy subgraph to localhost
 
-Deploy to localhost Graph node:
+`deploy-to <IP>` - Deploy subgraph to Graph Node by IP
 
-`yarn create-local` if first time, then:
+`deploy-hosted` - Deploy subgraph to hosted service
 
-`yarn deploy-local`
+`yarn lint` - Format code
 
-Deploy to Graph node by IP:
+`generate-abis` - Pull contract ABIs from Set Protocol V2 repo (only needed if changed)
 
-`yarn deploy-to <IP>`
+## Local development (mainnet fork)
 
-Format code:
+Recommend using a local Ethereum archive node like [Turbogeth](https://github.com/ledgerwatch/turbo-geth).
 
-`yarn lint`
+Install Graph Node (in separate directory)
 
-Pull contract ABIs from Set Protocol V2 repo (only needed if changed):
+1. `git clone -q --depth=1 https://github.com/graphprotocol/graph-node.git && cd graph-node/docker`
+2. Edit line 20 of docker-compose.yml to `ethereum: mainnet:http://host.docker.internal:8546` (May need to replace host.docker.internal with local IP)
 
-`yarn generate-abis`
+Run Hardhat Node (replace URL to your Ethereum node's RPC endpoint)
+
+`yarn start-hardhat http://localhost:8545`
+
+Run Graph Node (from `graph-node/docker` directory)
+
+`sudo docker-compose up`
+
+Visit `http://localhost:8000` to view subgraph data
 
 ## Reference
 
@@ -54,23 +74,3 @@ Pull contract ABIs from Set Protocol V2 repo (only needed if changed):
 [Set Protocol System Diagram](https://drive.google.com/file/d/15ETEqxkjkR29GmWH4gg4ob_OW9lb_Nly/view)
 
 [Hosted API](https://thegraph.com/explorer/subgraph/desert-defi/setprotocolv2)
-
-## Development
-
-### Local Graph Node
-
-Set up Turbogeth (min 1.5TB SSD free space):
-
-1. `git clone -q --depth=1 https://github.com/ledgerwatch/turbo-geth.git && cd turbo-geth`
-2. `sudo docker-compose build`
-3. `sudo XDG_DATA_HOME=/preferred/data/folder docker-compose up -d`
-
-Set up Graph Node
-
-1. `git clone -q --depth=1 https://github.com/graphprotocol/graph-node.git && cd graph-node/docker`
-2. `sudo bash setup.sh`
-3. `sudo docker-compose up -d`
-
-Watch logs:
-
-`sudo docker logs $(sudo docker container ls | grep graph-node | cut -d' ' -f1) -f --since 10m`
