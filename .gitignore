@@ -36,4 +36,4 @@ build/
 cache/
 
 # Generated subgraph manifest
-./subgraph.yaml
+subgraph.yaml

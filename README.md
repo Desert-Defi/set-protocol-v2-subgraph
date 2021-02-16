@@ -59,7 +59,7 @@ Restart `yarn chain` if redeploying.
 2. Edit line 20 of docker-compose.yml to `ethereum: hardhat:http://host.docker.internal:8545` (May need to replace host.docker.internal with local IP)
 3. Run with `sudo docker-compose up`
 
-`rm -rf ./data` and restart containers if hardhat chain changes.RE
+`rm -rf ./data` and restart containers if hardhat chain changes
 
 ### Deploy subgraph locally
 
@@ -74,9 +74,7 @@ Visit `http://localhost:8000/subgraphs/name/desert-defi/setprotocolv2/graphql` t
 
 [Discord: Index Co-op #set-subgraph](https://discord.gg/8FYPP7ebbw)
 
-[Subgraph Plan](https://docs.google.com/spreadsheets/d/1I3sk1kvfCPnnrUUCiBa35DZneeTx0vtGk04B-rKCJVE/edit#gid=0)
-
-[Subgraph notes](https://docs.google.com/document/d/1c2-JrZFc4WJxm_6X7Uj5kNXKNkZ_ZAzsS08Mv7UfVaw/edit?usp=sharing)
+[Subgraph notes](https://docs.google.com/document/d/1inFbQiskHoEKaNYdaHx69-quy8Y2xIva6N3673qw2jA/edit)
 
 [TheGraph Docs](https://thegraph.com/docs/)
 
