@@ -1,5 +1,4 @@
 import { PortfolioState } from '../../generated/schema';
-import { requireComponentState } from '../entities/ComponentState';
 import { BigInt, log } from '@graphprotocol/graph-ts';
 import { getID } from '../utils/getID';
 
@@ -30,18 +29,4 @@ export function requirePortfolioState(id: string): PortfolioState {
   let entity = PortfolioState.load(id) as PortfolioState;
   if (entity == null) log.critical('PortfolioState not found for {}', [id]);
   return entity;
-}
-
-export function removeComponentFromPortfolio(
-  portfolioStateID: string,
-  componentStateID: string
-): void {
-  let ps = requirePortfolioState(portfolioStateID);
-
-  ps.components = ps.components.filter((cs) => {
-    let comp = requireComponentState(cs);
-    return comp.id != componentStateID;
-  });
-
-  ps.save();
 }

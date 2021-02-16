@@ -52,10 +52,13 @@ export function ensureComponentState(
   cs.save();
 
   // replace old ComponentState with new
-  let newComponents = prevPortfolioState.components.filter((c) => {
-    let comp = requireComponentState(c);
-    return comp.asset != assetID;
-  });
+  let prevComponents = prevPortfolioState.components.filter((c) => !!c); // required for compilation
+  let newComponents: string[] = [];
+  for (let i = 0; i < prevComponents.length; i++) {
+    let cID = prevComponents[i];
+    let comp = requireComponentState(cID);
+    if (comp.asset != assetID) newComponents.push(cID);
+  }
   if (cs.totalUnits != BigInt.fromI32(0)) newComponents.push(id);
 
   let currPortfolioState = ensurePortfolioState(setID, timestamp, newComponents);

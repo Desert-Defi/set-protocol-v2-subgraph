@@ -6,9 +6,9 @@ Indexer of Set Protocol v2 events. Built on [The Graph](https://thegraph.com/).
 
 Requirements:
 
+- [Bash >= 5.0](https://gist.github.com/Rican7/44081a9806595704fa7b289c32fcd62c)
 - [Node.js >= 14.0](https://nodejs.org/en/download/)
 - [Yarn >= 1.22](https://yarnpkg.com)
-- [Bash >= 5.0](https://gist.github.com/Rican7/44081a9806595704fa7b289c32fcd62c)
 - [Docker >= 19.0](https://www.docker.com/get-started).
 
 Steps:
@@ -69,6 +69,20 @@ Restart `yarn chain` if redeploying.
 Graph-node may take a few minutes to sync the subgraph.
 
 Visit `http://localhost:8000/subgraphs/name/desert-defi/setprotocolv2/graphql` to view subgraph data
+
+## Files
+
+`schema.graphql` - Subgraph schema
+
+`templates/subgraph.yaml` - configure watched contracts and events
+
+`deployments.json` - configure deployed contract addresses
+
+`src/` - [AssemblyScript](https://www.assemblyscript.org) code for subgraph handlers
+
+`src/mappings/` - Event handlers
+
+`src/entities/` - Entity helper functions
 
 ## Reference
 
