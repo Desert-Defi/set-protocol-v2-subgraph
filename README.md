@@ -14,9 +14,8 @@ Requirements:
 Steps:
 
 1. `yarn install`
-2. `yarn codegen`
+2. `yarn gen-deployment <NETWORK_NAME>` hardhat or mainnet
 3. (If deploying to hosted service) `yarn graph auth https://api.thegraph.com/deploy/ <ACCESS_TOKEN>`
-4. (If Set Protocol contract ABI changed) `yarn generate-abis`
 
 ## Commands
 
@@ -26,9 +25,9 @@ Usage:
 
 Commands:
 
-`codegen` - Generate types (if schema or ABI changed)
-
 `build` - Compile subgraph
+
+`codegen` - Generate types (if schema or ABI changed)
 
 `deploy-local` - Deploy subgraph to localhost
 
@@ -36,28 +35,40 @@ Commands:
 
 `deploy-hosted` - Deploy subgraph to hosted service
 
-`yarn lint` - Format code
+`gen-abis` - Pull contract ABIs from Set Protocol V2 repo (only needed if changed)
 
-`generate-abis` - Pull contract ABIs from Set Protocol V2 repo (only needed if changed)
+`gen-deployment <NETWORK_NAME>` - Generate deployment-specific files
 
-## Local development (mainnet fork)
+`lint` - Format code
 
-Recommend using a local Ethereum archive node like [Turbogeth](https://github.com/ledgerwatch/turbo-geth).
+## Local development (hardhat)
 
-Install Graph Node (in separate directory)
+### Clone Set Protocol v2 fork (in separate directory)
+
+1. `git clone https://github.com/jgrizzled/set-protocol-v2-contracts.git -b mock-deployment && cd set-protocol-v2-contracts`
+2. `cp .env.default .env`
+3. `yarn install`
+4. `yarn chain`
+5. `yarn deploy-mock`
+
+Restart `yarn chain` if redeploying.
+
+### Install Graph Node
 
 1. `git clone -q --depth=1 https://github.com/graphprotocol/graph-node.git && cd graph-node/docker`
-2. Edit line 20 of docker-compose.yml to `ethereum: mainnet:http://host.docker.internal:8546` (May need to replace host.docker.internal with local IP)
+2. Edit line 20 of docker-compose.yml to `ethereum: hardhat:http://host.docker.internal:8545` (May need to replace host.docker.internal with local IP)
+3. Run with `sudo docker-compose up`
 
-Run Hardhat Node (replace URL to your Ethereum node's RPC endpoint)
+`rm -rf ./data` and restart containers if hardhat chain changes.RE
 
-`yarn start-hardhat http://localhost:8545`
+### Deploy subgraph locally
 
-Run Graph Node (from `graph-node/docker` directory)
+1. `yarn gen-deployment hardhat`
+2. `yarn deploy-local`
 
-`sudo docker-compose up`
+Graph-node may take a few minutes to sync the subgraph.
 
-Visit `http://localhost:8000` to view subgraph data
+Visit `http://localhost:8000/subgraphs/name/desert-defi/setprotocolv2/graphql` to view subgraph data
 
 ## Reference
 

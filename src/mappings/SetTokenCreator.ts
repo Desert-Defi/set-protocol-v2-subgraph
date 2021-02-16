@@ -1,9 +1,12 @@
 import { SetTokenCreated } from '../../generated/templates/SetTokenCreator/SetTokenCreator';
 import { SetToken as SetTokenTemplate } from '../../generated/templates';
 import { SetToken as SetTokenContract } from '../../generated/templates/SetToken/SetToken';
-import { SetToken, Component } from '../../generated/schema';
-import { useAsset } from '../entities/Asset';
+import { SetToken } from '../../generated/schema';
+import { ensureAsset } from '../entities/Asset';
+import { ensurePortfolioState } from '../entities/PortfolioState';
+import { ensureComponentState } from '../entities/ComponentState';
 import { BigInt } from '@graphprotocol/graph-ts';
+import { ensureTotalSupplyState } from '../entities/TotalSupplyState';
 
 export function handleSetTokenCreated(event: SetTokenCreated): void {
   let id = event.params._setToken.toHexString();
@@ -13,21 +16,26 @@ export function handleSetTokenCreated(event: SetTokenCreated): void {
   set.name = event.params._name;
   set.symbol = event.params._symbol;
   set.address = id;
+  set.portfolio = ensurePortfolioState(id, event.block.timestamp, []).id;
   set.totalSupply = BigInt.fromI32(0);
+  ensureTotalSupplyState(id, event.block.timestamp, BigInt.fromI32(0));
+  set.save();
 
-  // get initial components
+  // populate initial default positions
   let contract = SetTokenContract.bind(event.params._setToken);
   let components = contract.getComponents();
+  let componentStateIDs: string[] = [];
   for (let i = 0; i < components.length; i++) {
-    let asset = useAsset(components[i].toHexString());
-    let comp = new Component(set.id + '/' + asset.id);
-    comp.asset = asset.id;
-    comp.units = contract.getTotalComponentRealUnits(components[i]);
-    comp.setToken = set.id;
-    comp.save();
+    let asset = ensureAsset(components[i].toHexString());
+    componentStateIDs.push(
+      ensureComponentState(
+        id,
+        asset.id,
+        event.block.timestamp,
+        contract.getTotalComponentRealUnits(components[i])
+      ).id
+    );
   }
-
-  set.save();
 
   // watch new SetToken contract
   SetTokenTemplate.create(event.params._setToken);

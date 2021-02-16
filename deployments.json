@@ -1,37 +1,33 @@
 {
   "mainnet": {
-    "core": {
-      "Controller": "0xa4c8d221d8BB851f83aadd0223a8900A6921A349",
-      "SetTokenCreator": "0x65d103A810099193c892a23d6b320cF3B9E30D46",
-      "IntegrationRegistry": "0x6655194c95D24B8b10B156DFFCe22A2c126E2E5A",
-      "PriceOracle": "0xA60f9e1641747762aDE7FD5F881b90B691E92B0a",
-      "SetValuer": "0xDdF4F0775fF69c73619a4dBB42Ba61b0ac1F555f"
-    },
-    "modules": {
-      "BasicIssuanceModule": "0xd8EF3cACe8b4907117a45B0b125c68560532F",
-      "StreamingFeeModule": "0x08f866c74205617B6F3903EF481798EcED10cDEC",
-      "NavIssuanceModule": "0xaB9a964c6b95fA529CA7F27DAc1E7175821f2334",
-      "TradeModule": "0x90F765F63E7DC5aE97d6c576BF693FB6AF41C129",
-      "WrapModule": "0xbe4aEdE1694AFF7F1827229870f6cf3d9e7a999c",
-      "SingleIndexModuleDPI": "0x25100726b25a6ddb8f8e68988272e1883733966e",
-      "GovernanceModule": "0x5C87b042494cDcebA44C541fbB3BC8bFF179d500"
-    }
+    "network": "mainnet",
+    "startBlock": 10830495,
+    "Controller": "0xa4c8d221d8BB851f83aadd0223a8900A6921A349",
+    "SetTokenCreator": "0x65d103A810099193c892a23d6b320cF3B9E30D46",
+    "IntegrationRegistry": "0x6655194c95D24B8b10B156DFFCe22A2c126E2E5A",
+    "PriceOracle": "0xA60f9e1641747762aDE7FD5F881b90B691E92B0a",
+    "SetValuer": "0xDdF4F0775fF69c73619a4dBB42Ba61b0ac1F555f",
+    "BasicIssuanceModule": "0xd8EF3cACe8b4907117a45B0b125c68560532F",
+    "StreamingFeeModule": "0x08f866c74205617B6F3903EF481798EcED10cDEC",
+    "NavIssuanceModule": "0xaB9a964c6b95fA529CA7F27DAc1E7175821f2334",
+    "TradeModule": "0x90F765F63E7DC5aE97d6c576BF693FB6AF41C129",
+    "WrapModule": "0xbe4aEdE1694AFF7F1827229870f6cf3d9e7a999c",
+    "SingleIndexModuleDPI": "0x25100726b25a6ddb8f8e68988272e1883733966e",
+    "GovernanceModule": "0x5C87b042494cDcebA44C541fbB3BC8bFF179d500"
   },
-  "kovan": {
-    "core": {
-      "Controller": "0x9048278cA7e874F9338e4898C436Ab07AA454701",
-      "SetTokenCreator": "0xB24F7367ee8efcB5EAbe4491B42fA222EC68d411",
-      "IntegrationRegistry": "0x28A87DCca3322F90B3A4CE80cee499869EFdBf11",
-      "PriceOracle": "0xDFEA02F2824Ee177733d6f108005E95C85D1D4bE",
-      "SetValuer": "0xA37f4c5A7Ad72EEa9034195B75e7498C7ed1d4E3"
-    },
-    "modules": {
-      "BasicIssuanceModule": "0x8a070235a4B9b477655Bf4Eb65a1dB81051B3cC1",
-      "StreamingFeeModule": "0xE038E59DEEC8657d105B6a3Fb5040b3a6189Dd51",
-      "NavIssuanceModule": "0x5dB52450a8C0eb5e0B777D4e08d7A93dA5a9c848",
-      "TradeModule": "0xC93c8CDE0eDf4963ea1eea156099B285A945210a",
-      "WrapModule": "0x6BD69bf1FE2B1464a3017Da50fe4ca7c1779F8f6",
-      "GovernanceModule": "0x936Ffda1C892a7c65777b14C1D71fD2C79222099"
-    }
+  "hardhat": {
+    "network": "hardhat",
+    "startBlock": 0,
+    "Controller": "0x1dc4c1cefef38a777b15aa20260a54e584b16c48",
+    "SetTokenCreator": "0x8d61158a366019ac78db4149d75fff9dda51160d",
+    "IntegrationRegistry": "0xb69e673309512a9d726f87304c6984054f87a93b",
+    "PriceOracle": "0x131855dda0aaff096f6854854c55a4debf61077a",
+    "SetValuer": "0xe86bb98fcf9bff3512c74589b78fb168200cc546",
+    "BasicIssuanceModule": "0x1d7022f5b17d2f8b695918fb48fa1089c9f85401",
+    "StreamingFeeModule": "0xdc688d29394a3f1e6f1e5100862776691afaf3d2",
+    "NavIssuanceModule": "0xb7c9b454221e26880eb9c3101b3295ca7d8279ef",
+    "TradeModule": "0x59adefa01843c627ba5d6aa350292b4b7ccae67a",
+    "WrapModule": "",
+    "GovernanceModule": ""
   }
 }

@@ -6,11 +6,11 @@ schema:
 dataSources:
   - name: SetTokenCreator
     kind: ethereum/contract
-    network: 'hardhat'
+    network: '{{network}}'
     source:
       abi: SetTokenCreator
-      address: '0x8d61158a366019ac78db4149d75fff9dda51160d'
-      startBlock: 0
+      address: '{{SetTokenCreator}}'
+      startBlock: {{startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -33,7 +33,7 @@ dataSources:
 templates:
   - name: SetToken
     kind: ethereum/contract
-    network: 'hardhat'
+    network: '{{network}}'
     source:
       abi: SetToken
     mapping:

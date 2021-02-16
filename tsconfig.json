@@ -1,0 +1,13 @@
+{
+  /* Typescript rules */
+  "compilerOptions": {
+    "strict": true,
+    "alwaysStrict": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "exclude": ["node_modules"]
+}

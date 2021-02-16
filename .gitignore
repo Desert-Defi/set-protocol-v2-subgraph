@@ -31,3 +31,9 @@ tmp/
 
 # Build
 build/
+
+# Hardhat cache
+cache/
+
+# Generated subgraph manifest
+./subgraph.yaml

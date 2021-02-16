@@ -6,18 +6,28 @@ type Asset @entity {
   decimals: Int!
 }
 
-type Component @entity {
+type ComponentState @entity {
   id: ID!
-  asset: Asset!
-  units: BigInt!
   setToken: SetToken!
+  asset: Asset!
+  timestamp: BigInt!
+  defaultUnits: BigInt!
+  externalUnits: BigInt!
+  totalUnits: BigInt!
 }
 
-type Module @entity {
+type PortfolioState @entity {
   id: ID!
-  name: String!
-  address: String!
-  setTokens: [SetToken!]!
+  setToken: SetToken!
+  components: [ComponentState!]!
+  timestamp: BigInt!
+}
+
+type TotalSupplyState @entity {
+  id: ID!
+  setToken: SetToken!
+  timestamp: BigInt!
+  quantity: BigInt!
 }
 
 type SetToken @entity {
@@ -28,6 +38,7 @@ type SetToken @entity {
   inception: BigInt!
   manager: String!
   totalSupply: BigInt!
-  components: [Component!]! @derivedFrom(field: "setToken")
-  modules: [Module!]! @derivedFrom(field: "setTokens")
+  totalSupplyStates: [TotalSupplyState!]! @derivedFrom(field: "setToken")
+  portfolio: PortfolioState!
+  portfolioStates: [PortfolioState!]! @derivedFrom(field: "setToken")
 }
