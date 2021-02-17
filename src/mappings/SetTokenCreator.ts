@@ -7,12 +7,13 @@ import { ensurePortfolioState } from '../entities/PortfolioState';
 import { ensureComponentState } from '../entities/ComponentState';
 import { BigInt } from '@graphprotocol/graph-ts';
 import { ensureTotalSupplyState } from '../entities/TotalSupplyState';
+import { ensureManager } from '../entities/Manager';
 
 export function handleSetTokenCreated(event: SetTokenCreated): void {
   let id = event.params._setToken.toHexString();
   let set = new SetToken(id);
   set.inception = event.block.timestamp;
-  set.manager = event.params._manager.toHexString();
+  set.manager = ensureManager(event.params._manager.toHexString()).id;
   set.name = event.params._name;
   set.symbol = event.params._symbol;
   set.address = id;

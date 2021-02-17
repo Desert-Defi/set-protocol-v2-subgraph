@@ -36,14 +36,23 @@ export function ensureComponentState(
 
   // lookup previous ComponentState
   let prevPortfolioState = requirePortfolioState(set.portfolio);
-  let prevComponentStateIndex = prevPortfolioState.components.indexOf(id);
-  if (prevComponentStateIndex == -1) {
-    cs.externalUnits = BigInt.fromI32(0);
-    cs.defaultUnits = BigInt.fromI32(0);
-  } else {
-    let prevComponentState = requireComponentState(id);
+  let prevComponents = prevPortfolioState.components.filter((c) => !!c); // required for compilation
+
+  // replace old ComponentState with new
+  let newComponents: string[] = [];
+  let prevComponentState: ComponentState | null = null;
+  for (let i = 0; i < prevComponents.length; i++) {
+    let cID = prevComponents[i];
+    let comp = requireComponentState(cID);
+    if (comp.asset != assetID) newComponents.push(cID);
+    else prevComponentState = requireComponentState(cID);
+  }
+  if (prevComponentState) {
     cs.externalUnits = prevComponentState.externalUnits;
     cs.defaultUnits = prevComponentState.defaultUnits;
+  } else {
+    cs.externalUnits = BigInt.fromI32(0);
+    cs.defaultUnits = BigInt.fromI32(0);
   }
 
   if (defaultUnits) cs.defaultUnits = defaultUnits as BigInt;
@@ -51,14 +60,6 @@ export function ensureComponentState(
   cs.totalUnits = cs.externalUnits.plus(cs.defaultUnits);
   cs.save();
 
-  // replace old ComponentState with new
-  let prevComponents = prevPortfolioState.components.filter((c) => !!c); // required for compilation
-  let newComponents: string[] = [];
-  for (let i = 0; i < prevComponents.length; i++) {
-    let cID = prevComponents[i];
-    let comp = requireComponentState(cID);
-    if (comp.asset != assetID) newComponents.push(cID);
-  }
   if (cs.totalUnits != BigInt.fromI32(0)) newComponents.push(id);
 
   let currPortfolioState = ensurePortfolioState(setID, timestamp, newComponents);

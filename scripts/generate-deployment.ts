@@ -31,9 +31,9 @@ if (!fs.existsSync(generatedDir)) {
   fs.mkdirSync(generatedDir);
 }
 
-// deployment.ts
-let input = path.join(templatesDir, 'deployment.ts');
-let output = path.join(generatedDir, 'deployment.ts');
+// addresses.ts
+let input = path.join(templatesDir, 'addresses.ts');
+let output = path.join(generatedDir, 'addresses.ts');
 replace(input, output);
 
 // subgraph.yaml

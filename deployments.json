@@ -26,8 +26,6 @@
     "BasicIssuanceModule": "0x1d7022f5b17d2f8b695918fb48fa1089c9f85401",
     "StreamingFeeModule": "0xdc688d29394a3f1e6f1e5100862776691afaf3d2",
     "NavIssuanceModule": "0xb7c9b454221e26880eb9c3101b3295ca7d8279ef",
-    "TradeModule": "0x59adefa01843c627ba5d6aa350292b4b7ccae67a",
-    "WrapModule": "",
-    "GovernanceModule": ""
+    "TradeModule": "0x59adefa01843c627ba5d6aa350292b4b7ccae67a"
   }
 }

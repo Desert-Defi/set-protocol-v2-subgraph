@@ -92,6 +92,8 @@ Visit `http://localhost:8000/subgraphs/name/desert-defi/setprotocolv2/graphql` t
 
 [TheGraph Docs](https://thegraph.com/docs/)
 
+[Set Protocol V2 Docs](https://docs.tokensets.com/)
+
 [Set Protocol V2 Contracts](https://github.com/SetProtocol/set-protocol-v2-contracts)
 
 [Set Protocol System Diagram](https://drive.google.com/file/d/15ETEqxkjkR29GmWH4gg4ob_OW9lb_Nly/view)

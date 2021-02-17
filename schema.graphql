@@ -30,13 +30,39 @@ type TotalSupplyState @entity {
   quantity: BigInt!
 }
 
+type Manager @entity {
+  id: ID!
+  address: String!
+  setTokens: [SetToken!]! @derivedFrom(field: "manager")
+  feePayments: [FeePayment!]! @derivedFrom(field: "manager")
+}
+
+enum FeeKind {
+  streaming
+  entry
+  exit
+}
+
+type FeePayment @entity {
+  id: ID!
+  setToken: SetToken!
+  timestamp: BigInt!
+  manager: Manager!
+  asset: Asset
+  quantity: BigInt!
+  kind: FeeKind!
+}
+
 type SetToken @entity {
   id: ID!
   name: String!
   symbol: String!
   address: String!
   inception: BigInt!
-  manager: String!
+  manager: Manager!
+  streamingFee: BigInt
+  maxStreamingFee: BigInt
+  feePayments: [FeePayment!]! @derivedFrom(field: "setToken")
   totalSupply: BigInt!
   totalSupplyStates: [TotalSupplyState!]! @derivedFrom(field: "setToken")
   portfolio: PortfolioState!
