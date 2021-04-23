@@ -73,8 +73,10 @@ templates:
         - ComponentState
         - PortfolioState
         - TotalSupplyState
-        - FeePayment
+        - FeePaymentEvent
         - Manager
+        - Issuance
+        - Redemption
       abis:
         - name: SetToken
           file: ./abis/SetToken.json

@@ -1,3 +1,5 @@
+// TODO: Find way to export as structured data like array of objects. AssemblyScript didnt allow that.
+
 /* eslint-disable */
 export let Controller = '{{Controller}}';
 export let SetTokenCreator = '{{SetTokenCreator}}';

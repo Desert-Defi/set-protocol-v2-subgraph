@@ -2,14 +2,15 @@ import { PortfolioState } from '../../generated/schema';
 import { BigInt, log } from '@graphprotocol/graph-ts';
 import { getID } from '../utils/getID';
 
-export function getPortfolioStateID(setID: string, timestamp: BigInt): string {
-  return getID([setID, timestamp.toString()]);
+export function getPortfolioStateID(setID: string, blockNumber: BigInt): string {
+  return getID([setID, blockNumber.toString()]);
 }
 
 // create or update PortfolioState
 // components array will be replaced
 export function ensurePortfolioState(
   setID: string,
+  blockNumber: BigInt,
   timestamp: BigInt,
   componentStateIDs: string[]
 ): PortfolioState {
@@ -18,6 +19,7 @@ export function ensurePortfolioState(
   if (!ps) {
     ps = new PortfolioState(id);
     ps.setToken = setID;
+    ps.blockNumber = blockNumber;
     ps.timestamp = timestamp;
   }
   ps.components = componentStateIDs;
@@ -25,8 +27,8 @@ export function ensurePortfolioState(
   return ps as PortfolioState;
 }
 
-export function requirePortfolioState(id: string): PortfolioState {
-  let entity = PortfolioState.load(id) as PortfolioState;
+export function getPortfolioState(id: string): PortfolioState {
+  let entity = PortfolioState.load(id);
   if (entity == null) log.critical('PortfolioState not found for {}', [id]);
-  return entity;
+  return entity as PortfolioState;
 }

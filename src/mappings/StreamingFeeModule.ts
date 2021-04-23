@@ -2,15 +2,18 @@ import {
   FeeActualized,
   StreamingFeeUpdated
 } from '../../generated/StreamingFeeModule/StreamingFeeModule';
-import { requireManager } from '../entities/Manager';
-import { requireSetToken } from '../entities/SetToken';
-import { ensureFeePayment } from '../entities/FeePayment';
+import { getManager } from '../entities/Manager';
+import { getSetToken } from '../entities/SetToken';
+import { createFeePaymentEvent } from '../entities/FeePaymentEvent';
 
 export function handleFeeActualized(event: FeeActualized): void {
-  let set = requireSetToken(event.params._setToken.toHexString());
-  let manager = requireManager(set.manager);
-  ensureFeePayment(
+  let set = getSetToken(event.params._setToken.toHexString());
+  let manager = getManager(set.manager);
+  createFeePaymentEvent(
     set.id,
+    event.transaction.hash.toString(),
+    event.logIndex,
+    event.block.number,
     event.block.timestamp,
     'streaming',
     manager.id,
@@ -20,7 +23,7 @@ export function handleFeeActualized(event: FeeActualized): void {
 }
 
 export function handleStreamingFeeUpdated(event: StreamingFeeUpdated): void {
-  let set = requireSetToken(event.params._setToken.toHexString());
+  let set = getSetToken(event.params._setToken.toHexString());
   set.streamingFee = event.params._newStreamingFee;
   set.save();
 }

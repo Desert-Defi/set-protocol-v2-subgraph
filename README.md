@@ -45,7 +45,7 @@ Commands:
 
 ### Clone Set Protocol v2 fork (in separate directory)
 
-1. `git clone https://github.com/jgrizzled/set-protocol-v2-contracts.git -b mock-deployment && cd set-protocol-v2-contracts`
+1. `git clone https://github.com/jgrizzled/set-protocol-v2.git -b subgraph-dev && cd set-protocol-v2`
 2. `cp .env.default .env`
 3. `yarn install`
 4. `yarn chain`
@@ -60,6 +60,8 @@ Restart `yarn chain` if redeploying.
 3. Run with `sudo docker-compose up`
 
 `rm -rf ./data` and restart containers if hardhat chain changes
+
+`sudo docker-compose build` if updated via `git pull`
 
 ### Deploy subgraph locally
 
@@ -83,6 +85,46 @@ Visit `http://localhost:8000/subgraphs/name/desert-defi/setprotocolv2/graphql` t
 `src/mappings/` - Event handlers
 
 `src/entities/` - Entity helper functions
+
+## Design
+
+### Historical Entities
+
+#### Events
+
+Individual transaction log events referenced by TxID and log index. Can have multiple events of the same type with the same timestamp (IE same block). Ex TradeEvent.
+
+#### States
+
+Final state of an entity at the end of a block. Referenced by block number. Multiple events in the same block will be consolidated to one state update. Ex TotalSupplyState.
+
+Events are better for tracking important actions while States are better for timeseries data in which multiple data points per timestamp would be inconveinent.
+
+### Current Entities
+
+Tracks the most recent state of a contract. Usually references the latest event or state update entity.
+
+### Entity Helpers
+
+Most of the logic regarding manipulation of entities should be in helper functions. Create helper functions based on the following nomenclature as needed.
+
+Prefixes:
+
+- create: create new entity
+- get: lookup entity by ID and return entity or throw error
+- update: update entity with new properties
+- delete: remove entity from subgraph store
+- ensure: create or update existing entity. Useful for states
+- track: execute contract call and store result in new entity. Useful for data that is not provided via event logs.
+
+### Event Handlers
+
+Process event data and call entity helper functions to update the subgraph. Must register event handlers in `templates/subgraph.yaml`.
+
+### Template spawners
+
+Not all contract addresses are known at the time of subgraph deployment. To track contracts as they are deployed, use contract templates.
+Tell the subgraph to watch a newly created contract by calling create() on imports from `generated/templates`. Ex the SetToken factory contract (SetTokenCreator) emits an event when a new SetToken is created, so we register that address as a new SetToken contract to watch. Templates are defined in `templates/subgraph.yaml`.
 
 ## Reference
 

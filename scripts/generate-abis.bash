@@ -8,10 +8,10 @@ mkdir -p tmp
 
 cd tmp
 
-contract_wd="$(pwd)/set-protocol-v2-contracts"
+contract_wd="$(pwd)/set-protocol-v2"
 
 if [[ ! -d "$contract_wd" ]]; then
-  git clone -q --depth=1 https://github.com/SetProtocol/set-protocol-v2-contracts
+  git clone -q --depth=1 https://github.com/SetProtocol/set-protocol-v2
 
   cd "$contract_wd"
 

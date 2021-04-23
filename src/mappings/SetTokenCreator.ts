@@ -17,9 +17,19 @@ export function handleSetTokenCreated(event: SetTokenCreated): void {
   set.name = event.params._name;
   set.symbol = event.params._symbol;
   set.address = id;
-  set.portfolio = ensurePortfolioState(id, event.block.timestamp, []).id;
+  set.portfolio = ensurePortfolioState(
+    id,
+    event.block.number,
+    event.block.timestamp,
+    []
+  ).id;
   set.totalSupply = BigInt.fromI32(0);
-  ensureTotalSupplyState(id, event.block.timestamp, BigInt.fromI32(0));
+  ensureTotalSupplyState(
+    id,
+    event.block.number,
+    event.block.timestamp,
+    BigInt.fromI32(0)
+  );
   set.save();
 
   // populate initial default positions
@@ -32,6 +42,7 @@ export function handleSetTokenCreated(event: SetTokenCreated): void {
       ensureComponentState(
         id,
         asset.id,
+        event.block.number,
         event.block.timestamp,
         contract.getTotalComponentRealUnits(components[i])
       ).id

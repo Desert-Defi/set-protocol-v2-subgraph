@@ -11,6 +11,7 @@ type ComponentState @entity {
   setToken: SetToken!
   asset: Asset!
   timestamp: BigInt!
+  blockNumber: BigInt!
   defaultUnits: BigInt!
   externalUnits: BigInt!
   totalUnits: BigInt!
@@ -21,12 +22,14 @@ type PortfolioState @entity {
   setToken: SetToken!
   components: [ComponentState!]!
   timestamp: BigInt!
+  blockNumber: BigInt!
 }
 
 type TotalSupplyState @entity {
   id: ID!
   setToken: SetToken!
   timestamp: BigInt!
+  blockNumber: BigInt!
   quantity: BigInt!
 }
 
@@ -34,7 +37,7 @@ type Manager @entity {
   id: ID!
   address: String!
   setTokens: [SetToken!]! @derivedFrom(field: "manager")
-  feePayments: [FeePayment!]! @derivedFrom(field: "manager")
+  feePayments: [FeePaymentEvent!]! @derivedFrom(field: "manager")
 }
 
 enum FeeKind {
@@ -43,14 +46,37 @@ enum FeeKind {
   exit
 }
 
-type FeePayment @entity {
+type FeePaymentEvent @entity {
   id: ID!
+  txID: String!
+  logIndex: BigInt!
   setToken: SetToken!
   timestamp: BigInt!
+  blockNumber: BigInt!
   manager: Manager!
   asset: Asset
   quantity: BigInt!
   kind: FeeKind!
+}
+
+type IssuanceEvent @entity {
+  id: ID!
+  setToken: SetToken!
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  txID: String!
+  logIndex: BigInt!
+  quantity: BigInt!
+}
+
+type RedemptionEvent @entity {
+  id: ID!
+  setToken: SetToken!
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  txID: String!
+  logIndex: BigInt!
+  quantity: BigInt!
 }
 
 type SetToken @entity {
@@ -62,9 +88,11 @@ type SetToken @entity {
   manager: Manager!
   streamingFee: BigInt
   maxStreamingFee: BigInt
-  feePayments: [FeePayment!]! @derivedFrom(field: "setToken")
+  feePayments: [FeePaymentEvent!]! @derivedFrom(field: "setToken")
   totalSupply: BigInt!
   totalSupplyStates: [TotalSupplyState!]! @derivedFrom(field: "setToken")
   portfolio: PortfolioState!
   portfolioStates: [PortfolioState!]! @derivedFrom(field: "setToken")
+  issuances: [IssuanceEvent!]! @derivedFrom(field: "setToken")
+  redemptions: [RedemptionEvent!]! @derivedFrom(field: "setToken")
 }

@@ -1,8 +1,8 @@
 import { log } from '@graphprotocol/graph-ts';
 import { SetToken } from '../../generated/schema';
 
-export function requireSetToken(id: string): SetToken {
-  let entity = SetToken.load(id) as SetToken;
+export function getSetToken(id: string): SetToken {
+  let entity = SetToken.load(id);
   if (entity == null) log.critical('SetToken not found for {}', [id]);
-  return entity;
+  return entity as SetToken;
 }

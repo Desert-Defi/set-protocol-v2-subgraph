@@ -4,9 +4,9 @@ import { ERC20 } from '../../generated/templates/SetToken/ERC20';
 import { ERC20_bytes32 } from '../../generated/templates/SetToken/ERC20_bytes32';
 
 export function ensureAsset(address: string): Asset {
-  let asset = Asset.load(address) as Asset;
+  let asset = Asset.load(address);
   if (asset != null) {
-    return asset;
+    return asset as Asset;
   }
 
   let contract = ERC20.bind(Address.fromString(address));
