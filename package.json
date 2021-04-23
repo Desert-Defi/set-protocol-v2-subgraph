@@ -14,7 +14,8 @@
     "gen-abis": "bash scripts/generate-abis.bash && yarn codegen",
     "gen-deployment": "ts-node scripts/generate-deployment.ts",
     "lint": "prettier --write --loglevel warn '@(scripts|templates|src)/**/*.@(ts|js|graphql)' './*.@(ts|js|graphql)' && eslint '@(scripts|templates|src)/**/*.@(ts|js)' --fix",
-    "postgen-deployment": "yarn codegen"
+    "postgen-deployment": "yarn codegen",
+    "postinstall": "husky install"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "^0.20.0",
@@ -38,11 +39,6 @@
     "truffle": "^5.3.2",
     "truffle-contract": "^4.0.5",
     "truffle-hdwallet-provider": "^1.0.4"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "yarn lint-staged -v"
-    }
   },
   "lint-staged": {
     "@(scripts|templates|src)/**/*.@(ts|js)": [

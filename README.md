@@ -130,13 +130,15 @@ Tell the subgraph to watch a newly created contract by calling create() on impor
 
 [Discord: Index Co-op #set-subgraph](https://discord.gg/8FYPP7ebbw)
 
-[Subgraph notes](https://docs.google.com/document/d/1inFbQiskHoEKaNYdaHx69-quy8Y2xIva6N3673qw2jA/edit)
+[Subgraph Outline Sheet](https://docs.google.com/spreadsheets/d/1I3sk1kvfCPnnrUUCiBa35DZneeTx0vtGk04B-rKCJVE/edit?usp=sharing)
+
+[Subgraph notes doc](https://docs.google.com/document/d/1inFbQiskHoEKaNYdaHx69-quy8Y2xIva6N3673qw2jA/edit)
 
 [TheGraph Docs](https://thegraph.com/docs/)
 
 [Set Protocol V2 Docs](https://docs.tokensets.com/)
 
-[Set Protocol V2 Contracts](https://github.com/SetProtocol/set-protocol-v2-contracts)
+[Set Protocol V2 Contracts](https://github.com/SetProtocol/set-protocol-v2)
 
 [Set Protocol System Diagram](https://drive.google.com/file/d/15ETEqxkjkR29GmWH4gg4ob_OW9lb_Nly/view)
 
