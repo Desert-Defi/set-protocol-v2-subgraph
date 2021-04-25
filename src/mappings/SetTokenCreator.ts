@@ -1,4 +1,4 @@
-import { SetTokenCreated } from '../../generated/templates/SetTokenCreator/SetTokenCreator';
+import { SetTokenCreated } from '../../generated/SetTokenCreator/SetTokenCreator';
 import { SetToken as SetTokenTemplate } from '../../generated/templates';
 import { SetToken as SetTokenContract } from '../../generated/templates/SetToken/SetToken';
 import { SetToken } from '../../generated/schema';
