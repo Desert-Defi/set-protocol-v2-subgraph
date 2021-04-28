@@ -6,16 +6,17 @@ Indexer of Set Protocol v2 events. Built on [The Graph](https://thegraph.com/).
 
 Requirements:
 
-- [Bash >= 5.0](https://gist.github.com/Rican7/44081a9806595704fa7b289c32fcd62c)
+- Bash >= 5.0 [Mac](https://gist.github.com/Rican7/44081a9806595704fa7b289c32fcd62c) / [Win](https://nickjanetakis.com/blog/a-linux-dev-environment-on-windows-with-wsl-2-docker-desktop-and-more)
 - [Node.js >= 14.0](https://nodejs.org/en/download/)
-- [Yarn >= 1.22](https://yarnpkg.com)
-- [Docker >= 19.0](https://www.docker.com/get-started).
+- Yarn 1.x (`npm install -g yarn`)
+- [Docker >= 19.0](https://www.docker.com/get-started)
 
 Steps:
 
-1. `yarn install`
-2. `yarn gen-deployment <NETWORK_NAME>` hardhat or mainnet
-3. (If deploying to hosted service) `yarn graph auth https://api.thegraph.com/deploy/ <ACCESS_TOKEN>`
+1. `git clone https://github.com/Desert-Defi/set-protocol-v2-subgraph.git && cd set-protocol-v2-subgraph`
+2. `yarn install`
+3. `yarn gen-deployment <NETWORK_NAME>` hardhat or mainnet
+4. (If deploying to hosted service) `yarn graph auth https://api.thegraph.com/deploy/ <ACCESS_TOKEN>`
 
 ## Commands
 
@@ -43,27 +44,35 @@ Commands:
 
 ## Local development (hardhat)
 
-### Clone Set Protocol v2 fork (in separate directory)
+### Clone Set Protocol v2 fork
+
+In separate directory:
 
 1. `git clone https://github.com/jgrizzled/set-protocol-v2.git -b subgraph-dev && cd set-protocol-v2`
 2. `cp .env.default .env`
 3. `yarn install`
-4. `yarn chain`
-5. `yarn deploy-mock`
 
-Restart `yarn chain` if redeploying.
+To run the hardhat node:
+
+1. `yarn chain --hostname 0.0.0.0`
+2. Wait for node to start
+3. (in separate terminal) `yarn deploy-mock`
 
 ### Install Graph Node
 
+In separate directory:
+
 1. `git clone -q --depth=1 https://github.com/graphprotocol/graph-node.git && cd graph-node/docker`
-2. Edit line 20 of docker-compose.yml to `ethereum: hardhat:http://host.docker.internal:8545` (May need to replace host.docker.internal with local IP)
+2. Edit line 20 of docker-compose.yml to `ethereum: hardhat:http://host.docker.internal:8545` (May need to replace host.docker.internal with LAN IP)
 3. Run with `sudo docker-compose up`
 
-`rm -rf ./data` and restart containers if hardhat chain changes
+`rm -rf ./data` and restart containers if blockchain changes.
 
 `sudo docker-compose build` if updated via `git pull`
 
 ### Deploy subgraph locally
+
+From subgraph repo:
 
 1. `yarn gen-deployment hardhat`
 2. `yarn deploy-local`
@@ -71,6 +80,50 @@ Restart `yarn chain` if redeploying.
 Graph-node may take a few minutes to sync the subgraph.
 
 Visit `http://localhost:8000/subgraphs/name/desert-defi/setprotocolv2/graphql` to view subgraph data
+
+## Syncing to mainnet
+
+Syncing the subgraph to mainnet requires an Ethereum archive node. We recommend [Turbogeth](https://github.com/ledgerwatch/turbo-geth) as it syncs fast and will fit on a 2TB SSD at present. Note that it takes a few hours for the subgraph to sync and re-deploying the subgraph will re-sync from scratch.
+
+### Turbogeth
+
+In separate directory:
+
+1. `git clone -q --depth=1 https://github.com/ledgerwatch/turbo-geth.git && cd turbo-geth`
+2. `sudo docker-compose build` (re-run if updated via `git pull`)
+3. `sudo XDG_DATA_HOME=/preferred/data/folder docker-compose up -d`
+
+Watch logs with:
+
+`sudo docker logs $(sudo docker container ls | grep tg | cut -d' ' -f1) -f --since 10m`
+
+### Graph Node
+
+From graph-node repo:
+
+Ensure `docker/docker-compose.yml` is configured for mainnet on line 20: `ethereum: mainnet:`
+
+If you previously synced to hardhat, `rm -rf docker/data`.
+
+Don't start Graph Node until Turbogeth is fully synced.
+
+Start with:
+
+1. `cd docker`
+2. `sudo docker-compose up -d`
+
+Watch logs with:
+
+`sudo docker logs $(sudo docker container ls | grep graph-node | cut -d' ' -f1) -f --since 10m`
+
+### Deploy to mainnet
+
+From subgraph repo:
+
+1. `yarn gen-deployment mainnet`
+2. `yarn deploy-local` or `yarn deploy-to <IP>` if Graph Node on another machine.
+
+Watch graph-node logs for sync status and errors. Subgraph URL same as above.
 
 ## Files
 
