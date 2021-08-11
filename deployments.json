@@ -27,5 +27,33 @@
     "StreamingFeeModule": "0xdc688d29394a3f1e6f1e5100862776691afaf3d2",
     "NavIssuanceModule": "0xb7c9b454221e26880eb9c3101b3295ca7d8279ef",
     "TradeModule": "0x59adefa01843c627ba5d6aa350292b4b7ccae67a"
+  },
+  "matic": {
+    "network": "matic",
+    "startBlock": 0,
+    "Controller": "0x75FBBDEAfE23a48c0736B2731b956b7a03aDcfB2",
+    "SetTokenCreator": "0x14f0321be5e581abF9d5BC76260bf015Dc04C53d",
+    "IntegrationRegistry": "0x4c4C649455c6433dC48ff1571C9e50aC58f0CeFA",
+    "PriceOracle": "0x9378Ad514c00E4869656eE27b634d852DD48feAD",
+    "SetValuer": "0x3700414Bb6716FcD8B14344fb10DDd91FdEA59eC",
+    "BasicIssuanceModule": "0x38E5462BBE6A72F79606c1A0007468aA4334A92b",
+    "StreamingFeeModule": "0x8440f6a2c42118bed0D6E6A89Bf170ffd13e21c0",
+    "TradeModule": "0xd04AabadEd11e92Fefcd92eEdbBC81b184CdAc82"
+  },
+  "staging-mainnet": {
+    "network": "mainnet",
+    "startBlock": 10830495,
+    "Controller": "0xF1B12A7b1f0AF744ED21eEC7d3E891C48Fd3c329",
+    "SetTokenCreator": "0x026d25C2B70Ddbb8D759f1f38d6fD6e23b60B6DF",
+    "IntegrationRegistry": "0x3e8939a2ab27D79a21Ed86EF56bba62d82Db0C2D",
+    "PriceOracle": "0xFF31e9ACBc9D42B4F964F54f9752D2F74E4aCF1C",
+    "SetValuer": "0x6f4D1397C15C8AB6Ea218f80f397AcB71835654F",
+    "BasicIssuanceModule": "0x508910aA6fF3D029Dc358dD0f775877A355BA35B",
+    "StreamingFeeModule": "0x3D8d14b7eFb8e342189ee14c3d40dCe005EB901B",
+    "NavIssuanceModule": "0x442577CAc11DB91284d042D084AE0D142D36EEdF",
+    "TradeModule": "0x45D67b9dbEA9bd51ED2B67832addEAF839628fAa",
+    "WrapModule": "0x67eddd251E914a7a1a19bDa09295A28cc328dEFE",
+    "SingleIndexModuleDPI": "0x53ea895f0c152eea8b103092d3a1327fe53b580a",
+    "GovernanceModule": "0x2944B59B2214eE6d3649Ca53A0648F6548B94F86"
   }
 }

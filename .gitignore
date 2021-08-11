@@ -35,5 +35,6 @@ build/
 # Hardhat cache
 cache/
 
-# Generated subgraph manifest
+# Generated subgraph manifest and addresses
 subgraph.yaml
+addresses.ts

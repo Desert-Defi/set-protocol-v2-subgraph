@@ -13,10 +13,18 @@ Requirements:
 
 Steps:
 
-1. `git clone https://github.com/Desert-Defi/set-protocol-v2-subgraph.git && cd set-protocol-v2-subgraph`
+1. `git clone https://github.com/SetProtocol/set-protocol-v2-subgraph.git && cd set-protocol-v2-subgraph`
 2. `yarn install`
 3. `yarn gen-deployment <NETWORK_NAME>` hardhat or mainnet
-4. (If deploying to hosted service) `yarn graph auth https://api.thegraph.com/deploy/ <ACCESS_TOKEN>`
+4a. (If deploying to hosted service) `yarn graph auth https://api.thegraph.com/deploy/ <ACCESS_TOKEN>`
+
+Using Graph Subgraph Studio 
+1. `graph auth --studio <API KEY>` (see more at https://thegraph.com/studio/subgraph/set-protocol-v2/)
+2. `yarn gen-deployment <NETWORK_NAME>` hardhat or mainnet or matic or staging-mainnet
+3. `cp generated/addresses.ts .` Copy generated addresses file to root location
+3. `graph codegen && graph build`
+4. `graph deploy --studio set-protocol-v2` for mainnet or `graph deploy --studio set-protocol-v2-matic` for Matic/Polygon or `graph deploy --studio set-protocol-v2-staging` for staging mainnet
+
 
 ## Commands
 
