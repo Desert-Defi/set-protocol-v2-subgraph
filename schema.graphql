@@ -1,82 +1,7 @@
-type Asset @entity {
-  id: ID!
-  name: String!
-  symbol: String!
-  address: String!
-  decimals: Int!
-}
-
-type ComponentState @entity {
-  id: ID!
-  setToken: SetToken!
-  asset: Asset!
-  timestamp: BigInt!
-  blockNumber: BigInt!
-  defaultUnits: BigInt!
-  externalUnits: BigInt!
-  totalUnits: BigInt!
-}
-
-type PortfolioState @entity {
-  id: ID!
-  setToken: SetToken!
-  components: [ComponentState!]!
-  timestamp: BigInt!
-  blockNumber: BigInt!
-}
-
-type TotalSupplyState @entity {
-  id: ID!
-  setToken: SetToken!
-  timestamp: BigInt!
-  blockNumber: BigInt!
-  quantity: BigInt!
-}
-
 type Manager @entity {
   id: ID!
   address: String!
   setTokens: [SetToken!]! @derivedFrom(field: "manager")
-  feePayments: [FeePaymentEvent!]! @derivedFrom(field: "manager")
-}
-
-enum FeeKind {
-  streaming
-  entry
-  exit
-}
-
-type FeePaymentEvent @entity {
-  id: ID!
-  txID: String!
-  logIndex: BigInt!
-  setToken: SetToken!
-  timestamp: BigInt!
-  blockNumber: BigInt!
-  manager: Manager!
-  asset: Asset
-  quantity: BigInt!
-  kind: FeeKind!
-}
-
-type IssuanceEvent @entity {
-  id: ID!
-  setToken: SetToken!
-  timestamp: BigInt!
-  blockNumber: BigInt!
-  txID: String!
-  logIndex: BigInt!
-  quantity: BigInt!
-}
-
-type RedemptionEvent @entity {
-  id: ID!
-  setToken: SetToken!
-  timestamp: BigInt!
-  blockNumber: BigInt!
-  txID: String!
-  logIndex: BigInt!
-  quantity: BigInt!
 }
 
 type SetToken @entity {
@@ -86,13 +11,9 @@ type SetToken @entity {
   address: String!
   inception: BigInt!
   manager: Manager!
-  streamingFee: BigInt
-  maxStreamingFee: BigInt
-  feePayments: [FeePaymentEvent!]! @derivedFrom(field: "setToken")
-  totalSupply: BigInt!
-  totalSupplyStates: [TotalSupplyState!]! @derivedFrom(field: "setToken")
-  portfolio: PortfolioState!
-  portfolioStates: [PortfolioState!]! @derivedFrom(field: "setToken")
-  issuances: [IssuanceEvent!]! @derivedFrom(field: "setToken")
-  redemptions: [RedemptionEvent!]! @derivedFrom(field: "setToken")
+}
+
+type SetTokenCount @entity {
+  id: ID!
+  count: BigInt!
 }

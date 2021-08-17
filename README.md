@@ -16,7 +16,9 @@ Steps:
 1. `git clone https://github.com/SetProtocol/set-protocol-v2-subgraph.git && cd set-protocol-v2-subgraph`
 2. `yarn install`
 3. `yarn gen-deployment <NETWORK_NAME>` hardhat or mainnet
-4a. (If deploying to hosted service) `yarn graph auth https://api.thegraph.com/deploy/ <ACCESS_TOKEN>`
+4. (If deploying to hosted service) `yarn graph auth https://api.thegraph.com/deploy/ <ACCESS_TOKEN>`
+5. `graph deploy --product hosted-service justinkchen/set-protocol-v2-matic` 
+
 
 Using Graph Subgraph Studio 
 1. `graph auth --studio <API KEY>` (see more at https://thegraph.com/studio/subgraph/set-protocol-v2/)
