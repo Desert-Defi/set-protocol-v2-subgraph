@@ -33,5 +33,20 @@
     "network": "mainnet",
     "startBlock": 10819027,
     "SetTokenCreator": "0x026d25C2B70Ddbb8D759f1f38d6fD6e23b60B6DF"
+  },
+  "matic-staging-mainnet": {
+    "network": "matic",
+    "startBlock": 16655167,
+    "SetTokenCreator": "0x2907206b253665eef4776b8e684d61afd957b974"
+  },
+  "arbitrum-staging-mainnet": {
+    "network": "arbitrum-one",
+    "startBlock": 1168154,
+    "SetTokenCreator": "0xCF786472d37f557A80fE6daFF6f2672bfDa728a3"
+  },
+  "avalanche-staging-mainnet": {
+    "network": "avalanche",
+    "startBlock": 6097319,
+    "SetTokenCreator": "0xE99447aBbD5A7730b26D2D16fCcB2086319e4bC3"
   }
 }

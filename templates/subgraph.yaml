@@ -1,3 +1,4 @@
+# Updating comment here can help bump version for indexers to pick up changes ideally v1.0.0
 specVersion: 0.0.3
 description: Set Protocol V2
 repository: https://github.com/Desert-Defi/set-protocol-v2-subgraph

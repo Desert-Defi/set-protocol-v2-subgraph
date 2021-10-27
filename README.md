@@ -17,8 +17,17 @@ Steps:
 2. `yarn install`
 3. `yarn gen-deployment <NETWORK_NAME>` hardhat or mainnet
 4. (If deploying to hosted service) `yarn graph auth https://api.thegraph.com/deploy/ <ACCESS_TOKEN>`
-5. `graph deploy --product hosted-service justinkchen/set-protocol-v2-matic` 
+5. `graph deploy --product hosted-service justinkchen/set-protocol-v2-matic` (replace set-protocol-v2-matic with whatever graph is being deployed)
 
+Current subgraphs:
+- justinkchen/set-protocol-v2 (Ethereum Mainnet)
+- justinkchen/set-protocol-v2-staging (Ethereum Mainnet)
+- justinkchen/set-protocol-v2-matic (Matic)
+- justinkchen/set-protocol-v2-matic-staging (Matic)
+- justinkchen/set-protocol-v2-arbitrum (Arbitrum)
+- justinkchen/set-protocol-v2-arbitrum-staging (Arbitrum)
+- justinkchen/set-protocol-v2-avalanche (Avalanche)
+- justinkchen/set-protocol-v2-avax-staging (Avalanche) 
 
 Using Graph Subgraph Studio 
 1. `graph auth --studio <API KEY>` (see more at https://thegraph.com/studio/subgraph/set-protocol-v2/)
