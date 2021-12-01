@@ -48,5 +48,10 @@
     "network": "avalanche",
     "startBlock": 6097319,
     "SetTokenCreator": "0xE99447aBbD5A7730b26D2D16fCcB2086319e4bC3"
+  },
+  "optimism-staging-mainnet": {
+    "network": "optimism",
+    "startBlock": 593299,
+    "SetTokenCreator": "0xCF786472d37f557A80fE6daFF6f2672bfDa728a3"
   }
 }

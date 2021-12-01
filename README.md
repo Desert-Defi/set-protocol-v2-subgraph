@@ -28,8 +28,9 @@ Current subgraphs:
 - justinkchen/set-protocol-v2-arbitrum-staging (Arbitrum)
 - justinkchen/set-protocol-v2-avalanche (Avalanche)
 - justinkchen/set-protocol-v2-avax-staging (Avalanche) 
+- justinkchen/set-protocol-v2-optimism-staging (Optimism)
 
-Using Graph Subgraph Studio 
+Using Graph Subgraph Studio (Future steps once Subgraph studio supports more networks):
 1. `graph auth --studio <API KEY>` (see more at https://thegraph.com/studio/subgraph/set-protocol-v2/)
 2. `yarn gen-deployment <NETWORK_NAME>` hardhat or mainnet or matic or staging-mainnet
 3. `cp generated/addresses.ts .` Copy generated addresses file to root location
