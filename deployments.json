@@ -53,5 +53,10 @@
     "network": "optimism",
     "startBlock": 593299,
     "SetTokenCreator": "0xCF786472d37f557A80fE6daFF6f2672bfDa728a3"
+  },
+  "optimism-mainnet": {
+    "network": "optimism",
+    "startBlock": 900529,
+    "SetTokenCreator": "0x0bc84D31f11D90156c30B4f19509Ede969A0B840"
   }
 }
