@@ -2,150 +2,98 @@
 
 Indexer of Set Protocol v2 events. Built on [The Graph](https://thegraph.com/).
 
-## Setup
+## **Setup**
+---
 
-Requirements:
+### **Requirements:**
 
-- Bash >= 5.0 [Mac](https://gist.github.com/Rican7/44081a9806595704fa7b289c32fcd62c) / [Win](https://nickjanetakis.com/blog/a-linux-dev-environment-on-windows-with-wsl-2-docker-desktop-and-more)
-- [Node.js >= 14.0](https://nodejs.org/en/download/)
-- Yarn 1.x (`npm install -g yarn`)
-- [Docker >= 19.0](https://www.docker.com/get-started)
+- Docker >= 20.10
 
-Steps:
+---
+### **Local Deployment (hardhat)**
 
-1. `git clone https://github.com/SetProtocol/set-protocol-v2-subgraph.git && cd set-protocol-v2-subgraph`
-2. `yarn install`
-3. `yarn gen-deployment <NETWORK_NAME>` hardhat or mainnet
-4. (If deploying to hosted service) `yarn graph auth https://api.thegraph.com/deploy/ <ACCESS_TOKEN>`
-5. `graph deploy --product hosted-service justinkchen/set-protocol-v2-matic` (replace set-protocol-v2-matic with whatever graph is being deployed)
+#### **Step 0:** Deploy the hardhat network and graph node
+---
 
-Current subgraphs:
-- justinkchen/set-protocol-v2 (Ethereum Mainnet)
-- justinkchen/set-protocol-v2-staging (Ethereum Mainnet)
-- justinkchen/set-protocol-v2-matic (Matic)
-- justinkchen/set-protocol-v2-matic-staging (Matic)
-- justinkchen/set-protocol-v2-arbitrum (Arbitrum)
-- justinkchen/set-protocol-v2-arbitrum-staging (Arbitrum)
-- justinkchen/set-protocol-v2-avalanche (Avalanche)
-- justinkchen/set-protocol-v2-avax-staging (Avalanche) 
-- justinkchen/set-protocol-v2-optimism-staging (Optimism)
+> **NOTE**  This step will eventually be wrapped into a containerized deployment process, thus the naming convention of _Step 0_.
 
-Using Graph Subgraph Studio (Future steps once Subgraph studio supports more networks):
-1. `graph auth --studio <API KEY>` (see more at https://thegraph.com/studio/subgraph/set-protocol-v2/)
-2. `yarn gen-deployment <NETWORK_NAME>` hardhat or mainnet or matic or staging-mainnet
-3. `cp generated/addresses.ts .` Copy generated addresses file to root location
-3. `graph codegen && graph build`
-4. `graph deploy --studio set-protocol-v2` for mainnet or `graph deploy --studio set-protocol-v2-matic` for Matic/Polygon or `graph deploy --studio set-protocol-v2-staging` for staging mainnet
+_**Clone Set Protocol v2 fork**_
 
+In separate directory, clone the subgraph branch of the Set Protocol V2 repo:
 
-## Commands
-
-Usage:
-
-`yarn <COMMAND>`
-
-Commands:
-
-`build` - Compile subgraph
-
-`codegen` - Generate types (if schema or ABI changed)
-
-`deploy-local` - Deploy subgraph to localhost
-
-`deploy-to <IP>` - Deploy subgraph to Graph Node by IP
-
-`deploy-hosted` - Deploy subgraph to hosted service
-
-`gen-abis` - Pull contract ABIs from Set Protocol V2 repo (only needed if changed)
-
-`gen-deployment <NETWORK_NAME>` - Generate deployment-specific files
-
-`lint` - Format code
-
-## Local development (hardhat)
-
-### Clone Set Protocol v2 fork
-
-In separate directory:
-
-1. `git clone https://github.com/jgrizzled/set-protocol-v2.git -b subgraph-dev && cd set-protocol-v2`
+1. `git clone https://github.com/SetProtocol/set-protocol-v2.git -b subgraph-dev && cd set-protocol-v2`
 2. `cp .env.default .env`
 3. `yarn install`
 
-To run the hardhat node:
+Run the hardhat node then deploy mock tests to execute a minimal set of events:
 
 1. `yarn chain --hostname 0.0.0.0`
 2. Wait for node to start
 3. (in separate terminal) `yarn deploy-mock`
 
-### Install Graph Node
+_**Install Graph Node**_
 
 In separate directory:
 
 1. `git clone -q --depth=1 https://github.com/graphprotocol/graph-node.git && cd graph-node/docker`
-2. Edit line 20 of docker-compose.yml to `ethereum: hardhat:http://host.docker.internal:8545` (May need to replace host.docker.internal with LAN IP)
-3. Run with `sudo docker-compose up`
+2. Edit line 20 of docker-compose.yml to `ethereum: hardhat:http://host.docker.internal:8545` (May need to replace host.docker.internal with LAN IP on some Linux distros; Mac users should be okay.)
+3. Run with `docker-compose up` (or use `sudo` if your user does not have docker group access)
 
-`rm -rf ./data` and restart containers if blockchain changes.
+Run `rm -rf ./data` and restart containers if blockchain changes or you want to re-load the subgraph from scratch.
 
-`sudo docker-compose build` if updated via `git pull`
+Run `docker-compose build` if updated via `git pull`.
 
-### Deploy subgraph locally
 
-From subgraph repo:
+#### **Step 1:** Clone the subgraph repo
+---
 
-1. `yarn gen-deployment hardhat`
-2. `yarn deploy-local`
+```sh
+git clone https://github.com/SetProtocol/set-protocol-v2-subgraph.git
+cd set-protocol-v2-subgraph
+cp subgraph.env.default subgraph.env
+```
 
-Graph-node may take a few minutes to sync the subgraph.
+> **NOTE:**  Edit `subgraph.env` to target specific versions of node, network endpoints, etc., as required for your deployment.
 
-Visit `http://localhost:8000/subgraphs/name/desert-defi/setprotocolv2/graphql` to view subgraph data
+#### **Step 2:** Build the Docker subgraph image
+---
 
-## Syncing to mainnet
+The following command builds a local Docker image tagged `setprotocol/subgraph:node-<NODE_VER>` where the `NODE_VER` is defined in `subgraph.env`.
 
-Syncing the subgraph to mainnet requires an Ethereum archive node. We recommend [Turbogeth](https://github.com/ledgerwatch/turbo-geth) as it syncs fast and will fit on a 2TB SSD at present. Note that it takes a few hours for the subgraph to sync and re-deploying the subgraph will re-sync from scratch.
+```sh
+task docker-build
+```
 
-### Turbogeth
+#### **Step 3:** Pull, compile, and copy the Set Protocol ABIs
+---
 
-In separate directory:
+The following command runs a temp container to clone the Set Protocol V2 repo, compile the contracts, and extract a set of target ABIs (defined in `scripts/update-abis.sh`) into an `abi/` folder in the root directory.
 
-1. `git clone -q --depth=1 https://github.com/ledgerwatch/turbo-geth.git && cd turbo-geth`
-2. `sudo docker-compose build` (re-run if updated via `git pull`)
-3. `sudo XDG_DATA_HOME=/preferred/data/folder docker-compose up -d`
+```sh
+task gen-abi
+```
 
-Watch logs with:
+> **NOTE:**  The Set Protocol V2 repo only compiles against node versions 16 and below at this time.
 
-`sudo docker logs $(sudo docker container ls | grep tg | cut -d' ' -f1) -f --since 10m`
+#### **Step 4:** Create and deploy the subgraph
+---
 
-### Graph Node
+The following command will install node dependencies into a named Docker volume, build the subgraph mappings, create the subgraph, then deploy it to the target graph node and IPFS databse. Not that consecutive runs of this command will use the existing named volume for the node_modules unless it is manually removed.
 
-From graph-node repo:
+```sh
+task deploy-local
+```
 
-Ensure `docker/docker-compose.yml` is configured for mainnet on line 20: `ethereum: mainnet:`
+You can remove the named volume using:
 
-If you previously synced to hardhat, `rm -rf docker/data`.
+```sh
+docker volume rm docker_setprotocol-subgraph-node_modules
+```
 
-Don't start Graph Node until Turbogeth is fully synced.
+---
+## **Key Files**
 
-Start with:
-
-1. `cd docker`
-2. `sudo docker-compose up -d`
-
-Watch logs with:
-
-`sudo docker logs $(sudo docker container ls | grep graph-node | cut -d' ' -f1) -f --since 10m`
-
-### Deploy to mainnet
-
-From subgraph repo:
-
-1. `yarn gen-deployment mainnet`
-2. `yarn deploy-local` or `yarn deploy-to <IP>` if Graph Node on another machine.
-
-Watch graph-node logs for sync status and errors. Subgraph URL same as above.
-
-## Files
+`subgraph.env` - environment variables defining the runtime parameters
 
 `schema.graphql` - Subgraph schema
 
@@ -159,7 +107,8 @@ Watch graph-node logs for sync status and errors. Subgraph URL same as above.
 
 `src/entities/` - Entity helper functions
 
-## Design
+---
+## **Design**
 
 ### Historical Entities
 
