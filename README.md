@@ -78,7 +78,7 @@ task gen-abi
 #### **Step 4:** Create and deploy the subgraph
 ---
 
-The following command will install node dependencies into a named Docker volume, build the subgraph mappings, create the subgraph, then deploy it to the target graph node and IPFS databse. Not that consecutive runs of this command will use the existing named volume for the node_modules unless it is manually removed.
+The following command will install node dependencies into a named Docker volume, build the subgraph mappings, create the subgraph, then deploy it to the target graph node and IPFS database. Not that consecutive runs of this command will use the existing named volume for the `node_modules` unless it is manually removed.
 
 ```sh
 task deploy-local
@@ -89,6 +89,8 @@ You can remove the named volume using:
 ```sh
 docker volume rm docker_setprotocol-subgraph-node_modules
 ```
+
+The subgraph is deployed to the local graph-node and IPFS containers defined in the `subgraph.env` file. The subgraph endpoints given by the deployment are relative to the Docker container and not accessible externally as given. To access the subgraph, instead navigate to: http://127.0.0.1:8000/subgraphs/name/SetProtocol/setprotocolv2.
 
 ---
 ## **Key Files**
