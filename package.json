@@ -1,52 +1,7 @@
 {
   "name": "set-protocol-v2-subgraph",
   "version": "0.1.0",
-  "repository": "https://github.com/Desert-Defi/set-protocol-v2-subgraph",
-  "license": "MIT",
-  "scripts": {
-    "build": "graph build",
-    "codegen": "graph codegen",
-    "create-hosted": "graph create desert-defi/setprotocolv2 --node https://api.thegraph.com/deploy/",
-    "create-local": "graph create desert-defi/setprotocolv2 --node http://127.0.0.1:8020",
-    "deploy-hosted": "graph deploy desert-defi/setprotocolv2 --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
-    "deploy-local": "yarn create-local && graph deploy desert-defi/setprotocolv2 --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
-    "deploy-to": "bash scripts/deploy-to.bash",
-    "gen-abis": "bash scripts/generate-abis.bash && yarn codegen",
-    "gen-deployment": "ts-node scripts/generate-deployment.ts",
-    "lint": "prettier --write --loglevel warn '@(scripts|templates|src)/**/*.@(ts|js|graphql)' './*.@(ts|js|graphql)' && eslint '@(scripts|templates|src)/**/*.@(ts|js)' --fix",
-    "postgen-deployment": "yarn codegen",
-    "postinstall": "husky install"
-  },
-  "devDependencies": {
-    "@graphprotocol/graph-cli": "^0.20.0",
-    "@shopify/eslint-plugin-assemblyscript": "^0.1.13",
-    "@typescript-eslint/eslint-plugin": "^4.22.0",
-    "@typescript-eslint/parser": "^4.22.0",
-    "eslint": "^7.24.0",
-    "eslint-config-prettier": "^8.2.0",
-    "husky": "^6.0.0",
-    "lint-staged": "^10.5.4",
-    "prettier": "^2.2.1",
-    "ts-node": "^9.1.1",
-    "typescript": "^4.2.4"
-  },
-  "dependencies": {
-    "@graphprotocol/graph-ts": "^0.20.0",
-    "babel-polyfill": "^6.26.0",
-    "babel-register": "^6.26.0",
-    "dotenv": "^8.2.0",
-    "handlebars": "^4.7.7",
-    "truffle": "^5.3.2",
-    "truffle-contract": "^4.0.5",
-    "truffle-hdwallet-provider": "^1.0.4"
-  },
-  "lint-staged": {
-    "@(scripts|templates|src)/**/*.@(ts|js)": [
-      "eslint --fix",
-      "prettier --write --loglevel warn"
-    ],
-    "./*.@(graphql|ts|js)": [
-      "prettier --write --loglevel warn"
-    ]
-  }
+  "repository": "https://github.com/SetProtocol/set-protocol-v2-subgraph",
+  "description": "Set Protocol subgraph deployment repo",
+  "license": "MIT"
 }
