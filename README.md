@@ -2,100 +2,74 @@
 
 Indexer of Set Protocol v2 events. Built on [The Graph](https://thegraph.com/).
 
-## **Setup**
----
+## SETUP
 
-### **Requirements:**
+### Requirements:
 
 - Docker >= 20.10
 
----
-### **Local Deployment (hardhat)**
+### Local Deployment (Hardhat)
 
-#### **Step 0:** Deploy the hardhat network and graph node
----
+1. Build the subgraph Docker image
 
-> **NOTE**  This step will eventually be wrapped into a containerized deployment process, thus the naming convention of _Step 0_.
+    `task docker-build`
 
-_**Clone Set Protocol v2 fork**_
+1. Deploy a Hardhat node (use `task deploy-hardhat -- detach` to start container in detached mode)
 
-In separate directory, clone the subgraph branch of the Set Protocol V2 repo:
+    `task deploy-hardhat`
 
-1. `git clone https://github.com/SetProtocol/set-protocol-v2.git -b subgraph-dev && cd set-protocol-v2`
-2. `cp .env.default .env`
-3. `yarn install`
+1. Monitor the Hardhat node until fully deployed and tests are executed, e.g., if running detached use
 
-Run the hardhat node then deploy mock tests to execute a minimal set of events:
+    `docker logs docker-hardhat-1 --follow`
 
-1. `yarn chain --hostname 0.0.0.0`
-2. Wait for node to start
-3. (in separate terminal) `yarn deploy-mock`
+1. Compile the Set Protocol ABIs
 
-_**Install Graph Node**_
+    `task gen-abi`
 
-In separate directory:
+1. Deploy local subgraph
 
-1. `git clone -q --depth=1 https://github.com/graphprotocol/graph-node.git && cd graph-node/docker`
-2. Edit line 20 of docker-compose.yml to `ethereum: hardhat:http://host.docker.internal:8545` (May need to replace host.docker.internal with LAN IP on some Linux distros; Mac users should be okay.)
-3. Run with `docker-compose up` (or use `sudo` if your user does not have docker group access)
+    `task deploy-local`
 
-Run `rm -rf ./data` and restart containers if blockchain changes or you want to re-load the subgraph from scratch.
+1. Once deployed, query the subgraph in the browser at (by default) http://127.0.0.1:8000/subgraphs/name/SetProtocol/set-protocol-v2
 
-Run `docker-compose build` if updated via `git pull`.
+### [TO-DO] External Deployment (Graph Hosted Service / Subgraph Studio)
 
+TBD
 
-#### **Step 1:** Clone the subgraph repo
----
+## USAGE
 
-```sh
-git clone https://github.com/SetProtocol/set-protocol-v2-subgraph.git
-cd set-protocol-v2-subgraph
-cp subgraph.env.default subgraph.env
-```
+Available tasks for this project:
 
-> **NOTE:**  Edit `subgraph.env` to target specific versions of node, network endpoints, etc., as required for your deployment.
+| COMMAND [OPTS]               | DESCRIPTION |
+|------------------------------|---------------------------------------------------------------------------------|
+| `clean [-- all]`             | Clean up local subgraph deployment; `all` arg additionally removes all volumes and the Hardhat node. |
+| `deploy-hardhat [-- detach]` | Deploy a Hardhat node and subgraph tests; `detach` runs container detached. |
+| `deploy-hosted [-- detach]`  | Build and deploy subgraph on Hosted Service; `detach` runs container detached. |
+| `deploy-local [-- detach]`   | Build and deploy subgraph on local network; `detach` runs container detached. |
+| `destroy-hardhat`            | Tear down the deployed Hardhat node. |
+| `docker-build`               | Build subgraph Docker image on defined node version base (default: 16-slim). |
+| `gen-abi`                    | Pull latest Set Protocol ABIs into the build environment. |
 
-#### **Step 2:** Build the Docker subgraph image
----
+## [TO-DO] ADVANCED DEPLOYMENT GUIDES
 
-The following command builds a local Docker image tagged `setprotocol/subgraph:node-<NODE_VER>` where the `NODE_VER` is defined in `subgraph.env`.
+TBD: Things to be covered in this section
 
-```sh
-task docker-build
-```
+- custom override of args (requires custom untracked .env configs or CLI arg overrides)
+- the [Set Protocol V2 repo](https://github.com/SetProtocol/set-protocol-v2.git) currently requires node <= 16; therefore, Node 16 is the default target base image used in the Subgraph Docker image.
+- node dependencies installation into a named Docker volume, build the subgraph mappings, create the subgraph, then deploy it to the target graph node and IPFS database. Not that consecutive runs of this command will use the existing named volume for the `node_modules` unless it is manually removed.
+- the subgraph is deployed to the local graph-node and IPFS containers defined in the `subgraph.env` file. The subgraph endpoints given by the deployment are relative to the Docker container and not accessible externally as given. To access the subgraph, instead navigate to: http://127.0.0.1:8000/subgraphs/name/SetProtocol/setprotocolv2.
 
-#### **Step 3:** Pull, compile, and copy the Set Protocol ABIs
----
+## [TO-DO] SUBGRAPH DEVELOPMENT
 
-The following command runs a temp container to clone the Set Protocol V2 repo, compile the contracts, and extract a set of target ABIs (defined in `scripts/update-abis.sh`) into an `abi/` folder in the root directory.
+### Tutorial
 
-```sh
-task gen-abi
-```
+TBD
 
-> **NOTE:**  The Set Protocol V2 repo only compiles against node versions 16 and below at this time.
+### Reference Guide
 
-#### **Step 4:** Create and deploy the subgraph
----
+To Be Completed
 
-The following command will install node dependencies into a named Docker volume, build the subgraph mappings, create the subgraph, then deploy it to the target graph node and IPFS database. Not that consecutive runs of this command will use the existing named volume for the `node_modules` unless it is manually removed.
-
-```sh
-task deploy-local
-```
-
-You can remove the named volume using:
-
-```sh
-docker volume rm docker_setprotocol-subgraph-node_modules
-```
-
-The subgraph is deployed to the local graph-node and IPFS containers defined in the `subgraph.env` file. The subgraph endpoints given by the deployment are relative to the Docker container and not accessible externally as given. To access the subgraph, instead navigate to: http://127.0.0.1:8000/subgraphs/name/SetProtocol/setprotocolv2.
-
----
-## **Key Files**
-
-`subgraph.env` - environment variables defining the runtime parameters
+#### Key Files
 
 `schema.graphql` - Subgraph schema
 
@@ -109,26 +83,23 @@ The subgraph is deployed to the local graph-node and IPFS containers defined in 
 
 `src/entities/` - Entity helper functions
 
----
-## **Design**
+#### Historical Entities
 
-### Historical Entities
-
-#### Events
+##### Events
 
 Individual transaction log events referenced by TxID and log index. Can have multiple events of the same type with the same timestamp (IE same block). Ex TradeEvent.
 
-#### States
+##### States
 
 Final state of an entity at the end of a block. Referenced by block number. Multiple events in the same block will be consolidated to one state update. Ex TotalSupplyState.
 
 Events are better for tracking important actions while States are better for timeseries data in which multiple data points per timestamp would be inconveinent.
 
-### Current Entities
+##### Current Entities
 
 Tracks the most recent state of a contract. Usually references the latest event or state update entity.
 
-### Entity Helpers
+##### Entity Helpers
 
 Most of the logic regarding manipulation of entities should be in helper functions. Create helper functions based on the following nomenclature as needed.
 
@@ -141,16 +112,16 @@ Prefixes:
 - ensure: create or update existing entity. Useful for states
 - track: execute contract call and store result in new entity. Useful for data that is not provided via event logs.
 
-### Event Handlers
+#### Event/Call/Block Handlers
 
-Process event data and call entity helper functions to update the subgraph. Must register event handlers in `templates/subgraph.yaml`.
+Process events, function calls, and block data to update the subgraph. Must register handlers in `templates/subgraph.yaml`.
 
-### Template spawners
+#### Template spawners
 
 Not all contract addresses are known at the time of subgraph deployment. To track contracts as they are deployed, use contract templates.
 Tell the subgraph to watch a newly created contract by calling create() on imports from `generated/templates`. Ex the SetToken factory contract (SetTokenCreator) emits an event when a new SetToken is created, so we register that address as a new SetToken contract to watch. Templates are defined in `templates/subgraph.yaml`.
 
-## Reference
+## References
 
 [Discord: Index Co-op #set-subgraph](https://discord.gg/8FYPP7ebbw)
 

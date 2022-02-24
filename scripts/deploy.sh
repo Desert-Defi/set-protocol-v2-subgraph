@@ -1,24 +1,36 @@
 #!/bin/sh
 
+set -e
+
 # Install node dependencies (note: into named Docker volume, not on bind mount to host)
 npm install --include=dev typescript ts-node handlebars @graphprotocol/graph-cli @graphprotocol/graph-ts
 
+# Wait for graph-node container
+if [ "${DEPLOYMENT}" = "local" ]; then
+    bash ./scripts/wait-for-it.sh ${GRAPH_NODE_IP} -t 180
+fi
+
 # Instantiate the environment based on target network (e.g., hardhat, hosted)
-npx ts-node ./scripts/generate-deployment.ts $NETWORK
+npx ts-node ./scripts/generate-deployment.ts ${NETWORK_NAME}
 
 # Run graph codegen to produce intermediate artifacts for development
 npx graph codegen
 
 # Set access token param if provided
 if [ -n "${ACCESS_TOKEN+1}" ]; then
-    ACCESS_TOKEN="--access-token $ACCESS_TOKEN"
+    ACCESS_TOKEN_ARG="--access-token ${ACCESS_TOKEN}"
 fi
 
-# TO-DO:
-#   - consider paramterizing <repo/graphname> below
-
-echo "Create subgraph"
-npx graph create SetProtocol/setprotocolv2 --node ${NODE_IP} ${ACCESS_TOKEN}
-
-echo "Deploy subgraph"
-npx graph deploy -l ${SUBGRAPH_VER_LABEL} SetProtocol/setprotocolv2 --ipfs ${IPFS_IP} --node ${NODE_IP} ${ACCESS_TOKEN}
+if [ "${DEPLOYMENT}" = "local" ]; then
+    # Create and deploy subgraph to local graph node
+    echo "Create subgraph locally"
+    npx graph create ${GITHUB_REPO}/${GRAPH_NAME} --node "http://${GRAPH_NODE_IP}" ${ACCESS_TOKEN_ARG}
+    echo "Deploy subgraph"
+    npx graph deploy -l ${SUBGRAPH_VERSION} ${GITHUB_REPO}/${GRAPH_NAME} --ipfs "http://${IPFS_IP}" --node "http://${GRAPH_NODE_IP}" ${ACCESS_TOKEN_ARG}
+    echo "Deployment complete (press Ctrl+C to stop)"
+else
+    # TO-DO: external deployments are untested
+    # Authorize and deploy subgraph to Hosted Service
+    npx graph auth ${GRAPH_NODE_IP} ${ACCESS_TOKEN}
+    npx graph deploy --product hosted-service ${GITHUB_REPO}/${GRAPH_NAME}
+fi

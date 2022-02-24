@@ -1,0 +1,61 @@
+version: '3'
+
+services:
+
+  graph-node:
+    image: graphprotocol/graph-node
+    ports:
+      - '${GRAPHQL_PORT}:8000'
+    depends_on:
+      - ipfs
+      - postgres
+    environment:
+      postgres_host: postgres
+      postgres_user: graph-node
+      postgres_pass: let-me-in
+      postgres_db: graph-node
+      ipfs: 'ipfs:${IPFS_PORT}'
+      GRAPH_LOG: info
+      ethereum: hardhat:${HARDHAT_IP}:${HARDHAT_PORT}
+
+  ipfs:
+    image: ipfs/go-ipfs:v0.4.23
+    volumes:
+      - graph-node-ipfs:/data/ipfs
+
+  postgres:
+    image: postgres
+    command: ["postgres", "-cshared_preload_libraries=pg_stat_statements"]
+    environment:
+      POSTGRES_USER: graph-node
+      POSTGRES_PASSWORD: let-me-in
+      POSTGRES_DB: graph-node
+    volumes:
+      - graph-node-postgres:/var/lib/postgresql/data  
+
+  setprotocol-subgraph:
+    image: ${SET_IMAGE_NAME}:node-${NODE_VER}
+    depends_on:
+      - graph-node
+    environment:
+      DEPLOYMENT: ${DEPLOYMENT}
+      IPFS_IP: ${IPFS_IP}
+      GRAPH_NODE_IP: ${GRAPH_NODE_IP}
+      ACCESS_TOKEN: ${ACCESS_TOKEN}
+      SUBGRAPH_VERSION: ${SUBGRAPH_VERSION}
+      NETWORK_NAME: ${NETWORK_NAME}
+      GITHUB_REPO: ${GITHUB_REPO}
+      GRAPH_NAME: ${GRAPH_NAME}
+    volumes:
+      - ../:/subgraph
+      - setprotocol-subgraph-node_modules:/subgraph/node_modules
+    working_dir: /subgraph
+    command: ["sh", "./scripts/deploy.sh"]
+
+volumes:
+  graph-node-postgres:
+    external: false
+  graph-node-ipfs:
+    external: false
+  setprotocol-subgraph-node_modules:
+    external: false

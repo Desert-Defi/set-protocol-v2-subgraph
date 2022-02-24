@@ -1,12 +1,19 @@
 #!/bin/bash
 
-cd /tmp
+set -e
 
 REPO_URL="https://github.com/SetProtocol/set-protocol-v2"
 
+# Remove existing ABIs
+if [ ! -z "$(ls -A /subgraph/abis)" ]; then
+  echo "WARNING: Existing ABIs found. Removing..."
+  rm -rf /subgraph/abis/*
+fi
+
 # Clone and compile the Set Protocol V2 contracts repo
-git clone -q --depth=1 "$REPO_URL"
-cd $(echo "$REPO_URL" | rev | cut -d"/" -f1 | rev)
+cd /tmp
+git clone -q --depth=1 "${REPO_URL}"
+cd $(echo "${REPO_URL}" | rev | cut -d"/" -f1 | rev)
 cp .env.default .env
 yarn && yarn compile
 cd artifacts

@@ -1,50 +1,76 @@
 version: "3"
 
-dotenv: ["./subgraph.env"]
+dotenv: ["./docker/.env"]
 
 tasks:
+
+  clean:
+    desc: "Clean up local subgraph deployment; deletes all locally deployed subgraph data."
+    dir: docker/
+    cmds:
+      - docker-compose -f docker-compose.local.yml down --volumes {{.ARGS}}
+    vars:
+      ARGS:
+        sh: if [ "{{.CLI_ARGS}}" = "all" ]; then echo "--remove-orphans"; else echo ""; fi
+
+  deploy-hardhat:
+    desc: "Deploy a Hardhat node and subgraph tests."
+    dir: docker/
+    cmds:
+      - docker-compose -f docker-compose.hardhat.yml up {{.ARGS}}
+    vars:
+      ARGS:
+        sh: if [ "{{.CLI_ARGS}}" = "detach" ]; then echo "-d"; else echo ""; fi
+
+  deploy-hosted:
+    # TO-DO: untested
+    desc: "Build and deploy subgraph on Hosted Service."
+    dir: docker/
+    cmds:
+      - docker-compose -f docker-compose.hosted.yml up {{.ARGS}}
+    vars:
+      ARGS:
+        sh: if [ "{{.CLI_ARGS}}" = "detach" ]; then echo "-d"; else echo ""; fi
+    env:
+      DEPLOYMENT: "hosted"
+      NETWORK_NAME: "{{.NETWORK_HOSTED}}"
+    preconditions:
+      - sh: if [ -z "$(ls -A ../abis)" ]; then exit -1; fi
+        msg: "ERROR: No ABIs found. Run 'task gen-abi' first."
+
+  deploy-local:
+    desc: "Build and deploy subgraph on local network."
+    dir: docker/
+    cmds:
+      - docker-compose -f docker-compose.local.yml up {{.ARGS}}
+    vars:
+      ARGS:
+        sh: if [ "{{.CLI_ARGS}}" = "detach" ]; then echo "-d"; else echo ""; fi
+    env:
+      DEPLOYMENT: "local"
+      ACCESS_TOKEN: "{{.ACCESS_TOKEN}}"
+      IPFS_IP: "{{.IPFS_CONTAINER}}:{{.IPFS_PORT}}"
+      GRAPH_NODE_IP: "{{.GRAPH_NODE_CONTAINER}}:{{.GRAPH_NODE_PORT}}"
+      NETWORK_NAME: "{{.NETWORK_LOCAL}}"
+    preconditions:
+      - sh: if [ -z "$(ls -A ../abis)" ]; then exit -1; fi
+        msg: "ERROR: No ABIs found. Run 'task gen-abi' first."
+
+  destroy-hardhat:
+    desc: "Tear down the deployed Hardhat node."
+    dir: docker/
+    cmds:
+      - docker-compose -f docker-compose.hardhat.yml down --volumes
 
   docker-build:
     desc: "Build subgraph Docker image on defined node version base (default: 16-slim)."
     cmds:
-      - docker build -t setprotocol/subgraph:node-${NODE_VER} -f docker/Dockerfile --build-arg NODE_VER=$NODE_VER .
+      - docker build -t {{.SET_IMAGE_NAME}}:node-${NODE_VER} -f docker/Dockerfile --build-arg NODE_VER=$NODE_VER .
     env:
       NODE_VER: "{{.NODE_VER}}"
 
   gen-abi:
-    desc: "Pull latest Set Protocol ABIs into the build env."
+    desc: "Pull latest Set Protocol ABIs into the build environment."
     cmds:
       # Note the following command requires node ver 16 or below (only 12 and 16 tested working)
-      - docker run -v $(pwd)/abis:/subgraph/abis -v $(pwd)/scripts:/subgraph/scripts -w /subgraph --rm setprotocol/subgraph:node-16 bash scripts/update-abis.sh
-
-  deploy:
-    desc: "Build and deploy subgraph."
-    dir: docker/
-    cmds:
-      - docker-compose up
-    env:
-      NODE_VER: "{{.NODE_VER}}"
-      IPFS_IP: "{{.IPFS_IP}}"
-      NODE_IP: "{{.NODE_IP}}"
-      NETWORK: "{{.NETWORK}}"
-      ACCESS_TOKEN: "{{.ACCESS_TOKEN}}"
-      SUBGRAPH_VER_LABEL: "{{.SUBGRAPH_VER_LABEL}}"
-
-  deploy-local:
-    desc: "Build and deploy subgraph on local network."
-    cmds:
-      - task: deploy
-        vars:
-          ACCESS_TOKEN: "{{.ACCESS_TOKEN}}"
-          IPFS_IP: "http://{{.IPFS_LOCAL}}:{{.IPFS_PORT}}"
-          NODE_IP: "http://{{.NODE_LOCAL}}:{{.NODE_PORT}}"
-          NETWORK: "hardhat"
-
-  deploy-hosted:
-    desc: "Build and deploy subgraph on Hosted Service."
-    cmds:
-      - task: deploy
-        vars: 
-          IPFS_IP: "https://{{.IPFS_HOSTED}}"
-          NODE_IP: "https://{{.NODE_HOSTED}}"
-          NETWORK: "{{.NETWORK}}"
+      - docker run --rm -v $(pwd)/abis:/subgraph/abis -v $(pwd)/scripts:/subgraph/scripts -w /subgraph {{.SET_IMAGE_NAME}}:node-{{.NODE_VER}} bash scripts/update-abis.sh
