@@ -2,15 +2,15 @@ version: '3'
 
 services:
 
-  hardhat:
-    image: ${SET_IMAGE_NAME}:node-${NODE_VER}
-    command: ["sh", "/scripts/deploy-hardhat.sh"]
+  hardhat-build:
+    image: ${HARDHAT_IMAGE_NAME}:node-${NODE_VER}
     environment:
-      HARDHAT_PORT: ${HARDHAT_PORT}
-    working_dir: /hardhat
+      HARDHAT_PORT: ${HARDHAT_PORT:-"8545"}
+      TEST_SCRIPT: ${TEST_SCRIPT:-""}
+    working_dir: /app
     volumes:
-      - ../scripts:/scripts
-      - hardhat:/hardhat
+      - ../scripts:/app/scripts
+      - hardhat:/app
 
 volumes:
   hardhat:

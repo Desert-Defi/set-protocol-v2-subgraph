@@ -1,9 +1,9 @@
-# Build SetProtocol Subgraph Image
+# Build SetProtocol Base Image
 #
-# Builds a minimal image with dependencies required for The Graph deployments.
+# Builds a minimal image with dependencies required for various deployments.
 # Expectation is to build in the repo root directory by running, e.g.,
 #
-#   docker build -t setprotocol/subgraph:${NODE_VER}-slim -f docker/Dockerfile .
+#   docker build -t setprotocol/base:${NODE_VER}-slim -f docker/Dockerfile.base .
 #
 # This is handled by the task `docker-build` in the Taskfile.
 

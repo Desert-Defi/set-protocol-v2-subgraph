@@ -1,19 +1,89 @@
-type Manager @entity {
+type Protocol @entity {
+  # protocol version
   id: ID!
-  address: String!
+  # cumulative number of managers
+  # TO-DO: does not take into account inactive managers with zero SetTokens
+  managerCount: Int!
+  # cumulative number of SetTokens created
+  setTokenCount: Int!
+  # derived fields
+  managers: [Manager!]! @derivedFrom(field: "protocol")
+  setTokens: [SetToken!]! @derivedFrom(field: "protocol")
+}
+
+type Manager @entity {
+  # manager address
+  id: ID!
+  # this is redundant, remove
+  #address: String!
+  protocol: Protocol!
+  # derived fields
   setTokens: [SetToken!]! @derivedFrom(field: "manager")
 }
 
 type SetToken @entity {
+  # contract address
   id: ID!
+  protocol: Protocol!
+  # name of Set
   name: String!
+  # symbol of Set
   symbol: String!
-  address: String!
+  # contract address; duplicate of id, consider removing
+  #address: String!
+  # block timestamp
   inception: BigInt!
+  # manager address
   manager: Manager!
+  # derived fields
+  feeRecipientUpdates: [FeeRecipientUpdate!]! @derivedFrom(field: "setToken")
+  managerUpdates: [ManagerUpdate!]! @derivedFrom(field: "setToken")
+  streamingFeeAccrues: [StreamingFeeAccrue!]! @derivedFrom(field: "setToken")
+  streamingFeeUpdates: [StreamingFeeUpdate!]! @derivedFrom(field: "setToken")
+  rebalanceTrades: [RebalanceTrade!]! @derivedFrom(field: "setToken")
 }
 
-type SetTokenCount @entity {
+type FeeRecipientUpdate @entity {
   id: ID!
-  count: BigInt!
+  timestamp: BigInt!
+  address: String!
+  setToken: SetToken!
+}
+
+type ManagerUpdate @entity {
+  id: ID!
+  timestamp: BigInt!
+  oldManager: String!
+  newManager: String!
+  setToken: SetToken!
+}
+
+type StreamingFeeAccrue @entity {
+  # transaction.id + SetToken.txCount
+  id: ID!
+  # timestamp of transaction
+  timestamp: BigInt!
+  #address: String!
+  managerFee: BigInt!
+  protocolFee: BigInt!
+  setToken: SetToken!
+}
+
+type StreamingFeeUpdate @entity {
+  id: ID!
+  timestamp: BigInt!
+  fee: BigInt!
+  setToken: SetToken!
+}
+
+type RebalanceTrade @entity {
+  id: ID!
+  timestamp: BigInt!
+  exchange: String!
+  sendToken: String!
+  receiveToken: String!
+  totalSendAmount: BigInt!
+  totalReceiveAmount: BigInt!
+  fee: BigInt!
+  setToken: SetToken!
 }

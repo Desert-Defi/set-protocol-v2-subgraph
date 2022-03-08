@@ -1,0 +1,21 @@
+# Build SetProtocol Hardhat Image
+#
+# Builds a minimal image with dependencies required for a Hardhat node deployment.
+# Expectation is to build in the repo root directory by running, e.g.,
+#
+#   docker build -t setprotocol/hardhat:${NODE_VER}-slim -f docker/Dockerfile.hardhat .
+#
+# This is handled by the task `docker-build` in the Taskfile.
+
+ARG NODE_VER=16
+ARG SET_IMAGE_NAME=setprotoco/base
+
+FROM ${SET_IMAGE_NAME}:node-${NODE_VER} as base
+
+COPY ./docker/scripts/deploy-set-protocol-v2.sh /tmp
+
+WORKDIR /app
+
+RUN /bin/bash /tmp/deploy-set-protocol-v2.sh \
+    && rm -rf /tmp/*
+

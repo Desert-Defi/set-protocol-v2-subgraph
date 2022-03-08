@@ -18,124 +18,15 @@ dataSources:
       language: wasm/assemblyscript
       file: ./src/mappings/SetTokenCreator.ts
       entities:
-        - SetToken
         - Manager
+        - Protocol
+        - SetToken
       abis:
         - name: SetTokenCreator
           file: ./abis/SetTokenCreator.json
-        - name: SetToken
-          file: ./abis/SetToken.json
       eventHandlers:
         - event: SetTokenCreated(indexed address,address,string,string)
           handler: handleSetTokenCreated
-  # - name: SetTokenCreator-deprecated-staging-mainnet
-  #   kind: ethereum/contract
-  #   network: '{{network}}'
-  #   source:
-  #     abi: SetTokenCreator
-  #     address: '0x86a73e16D2dEce40b378B6aF645A93678214EF43'
-  #     startBlock: {{startBlock}}
-  #   mapping:
-  #     kind: ethereum/events
-  #     apiVersion: 0.0.6
-  #     language: wasm/assemblyscript
-  #     file: ./src/mappings/SetTokenCreator.ts
-  #     entities:
-  #       - SetToken
-  #       - Manager
-  #     abis:
-  #       - name: SetTokenCreator
-  #         file: ./abis/SetTokenCreator.json
-  #       - name: SetToken
-  #         file: ./abis/SetToken.json
-  #       - name: ERC20
-  #         file: ./abis/ERC20.json
-  #       - name: ERC20_bytes32
-  #         file: ./abis/ERC20_bytes32.json
-  #     eventHandlers:
-  #       - event: SetTokenCreated(indexed address,address,string,string)
-  #         handler: handleSetTokenCreated
-  # - name: SetTokenCreator-deprecated-staging-mainnet-2 
-  #   kind: ethereum/contract
-  #   network: '{{network}}'
-  #   source:
-  #     abi: SetTokenCreator
-  #     address: '0xec01143fc87605c819c1acbd23e4d4a8b89f30bd'
-  #     startBlock: {{startBlock}}
-  #   mapping:
-  #     kind: ethereum/events
-  #     apiVersion: 0.0.6
-  #     language: wasm/assemblyscript
-  #     file: ./src/mappings/SetTokenCreator.ts
-  #     entities:
-  #       - SetToken
-  #       - Manager
-  #     abis:
-  #       - name: SetTokenCreator
-  #         file: ./abis/SetTokenCreator.json
-  #       - name: SetToken
-  #         file: ./abis/SetToken.json
-  #       - name: ERC20
-  #         file: ./abis/ERC20.json
-  #       - name: ERC20_bytes32
-  #         file: ./abis/ERC20_bytes32.json
-  #     eventHandlers:
-  #       - event: SetTokenCreated(indexed address,address,string,string)
-  #         handler: handleSetTokenCreated
-  # - name: SetTokenCreator-deprecated-mainnet
-  #   kind: ethereum/contract
-  #   network: '{{network}}'
-  #   source:
-  #     abi: SetTokenCreator
-  #     address: '0x65d103A810099193c892a23d6b320cF3B9E30D46'
-  #     startBlock: {{startBlock}}
-  #   mapping:
-  #     kind: ethereum/events
-  #     apiVersion: 0.0.6
-  #     language: wasm/assemblyscript
-  #     file: ./src/mappings/SetTokenCreator.ts
-  #     entities:
-  #       - SetToken
-  #       - Manager
-  #     abis:
-  #       - name: SetTokenCreator
-  #         file: ./abis/SetTokenCreator.json
-  #       - name: SetToken
-  #         file: ./abis/SetToken.json
-  #       - name: ERC20
-  #         file: ./abis/ERC20.json
-  #       - name: ERC20_bytes32
-  #         file: ./abis/ERC20_bytes32.json
-  #     eventHandlers:
-  #       - event: SetTokenCreated(indexed address,address,string,string)
-  #         handler: handleSetTokenCreated
-  # - name: SetTokenCreator-deprecated-mainnet-2
-  #   kind: ethereum/contract
-  #   network: '{{network}}'
-  #   source:
-  #     abi: SetTokenCreator
-  #     address: '0x8cb9e7bdd78926933fc9d19f5f69fefc2b737087'
-  #     startBlock: {{startBlock}}
-  #   mapping:
-  #     kind: ethereum/events
-  #     apiVersion: 0.0.6
-  #     language: wasm/assemblyscript
-  #     file: ./src/mappings/SetTokenCreator.ts
-  #     entities:
-  #       - SetToken
-  #       - Manager
-  #     abis:
-  #       - name: SetTokenCreator
-  #         file: ./abis/SetTokenCreator.json
-  #       - name: SetToken
-  #         file: ./abis/SetToken.json
-  #       - name: ERC20
-  #         file: ./abis/ERC20.json
-  #       - name: ERC20_bytes32
-  #         file: ./abis/ERC20_bytes32.json
-  #     eventHandlers:
-  #       - event: SetTokenCreated(indexed address,address,string,string)
-  #         handler: handleSetTokenCreated
 templates:
   - name: SetToken
     kind: ethereum/contract
@@ -148,22 +39,52 @@ templates:
       language: wasm/assemblyscript
       file: ./src/mappings/SetToken.ts
       entities:
-        - Manager
+        - ManagerUpdate
       abis:
         - name: SetToken
           file: ./abis/SetToken.json
-        - name: StreamingFeeModule
-          file: ./abis/StreamingFeeModule.json
-        - name: TradeModule
-          file: ./abis/TradeModule.json
       eventHandlers:
         - event: ManagerEdited(address,address)
           handler: handleManagerEdited
-        # - event: FeeActualized(address indexed,uint256,uint256)
-        #   handler: handleFeeActualized
-        # - event: StreamingFeeUpdated(address indexed,uint256)
-        #   handler: handleStreamingFeeUpdated
-        # - event: FeeRecipientUpdated(address indexed,address)
-        #   handler: handleFeeRecipientUpdated
-        # - event: ComponentExchanged(ISetToken indexed,address indexed,address indexed,IExchangeAdapter,uint256,uint256,uint256)
-        #   handler: handleComponentExchanged
+  - name: TradeModule
+    kind: ethereum/contract
+    network: '{{network}}'
+    source:
+      abi: TradeModule
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/mappings/TradeModule.ts
+      entities:
+        - ComponentExchanged
+      abis:
+        - name: TradeModule
+          file: ./abis/TradeModule.json
+      eventHandlers:
+        - event: ComponentExchanged(indexed address,indexed address,indexed address,address,uint256,uint256,uint256)
+          handler: handleComponentExchanged
+  - name: StreamingFeeModule
+    kind: ethereum/contract
+    network: '{{network}}'
+    source:
+      abi: StreamingFeeModule
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/mappings/StreamingFeeModule.ts
+      entities:
+        - StreamingFeeAccrue
+        - StreamingFeeUpdate
+        - FeeRecipientUpdate
+      abis:
+        - name: StreamingFeeModule
+          file: ./abis/StreamingFeeModule.json
+      eventHandlers:
+        - event: FeeActualized(indexed address,uint256,uint256)
+          handler: handleFeeActualized
+        - event: StreamingFeeUpdated(indexed address,uint256)
+          handler: handleStreamingFeeUpdated
+        - event: FeeRecipientUpdated(indexed address,address)
+          handler: handleFeeRecipientUpdated
