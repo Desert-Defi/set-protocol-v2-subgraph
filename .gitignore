@@ -17,8 +17,9 @@ node_modules/
 # Yarn Integrity file
 .yarn-integrity
 
-# dotenv environment variables file
+# dotenv environment variable file
 .env
+!docker/.env
 
 # VS Code config
 .vscode/

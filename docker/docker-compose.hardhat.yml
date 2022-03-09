@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+
+  hardhat:
+    image: ${SET_IMAGE_NAME}:node-${NODE_VER}
+    command: ["sh", "/scripts/deploy-hardhat.sh"]
+    environment:
+      HARDHAT_PORT: ${HARDHAT_PORT}
+    working_dir: /hardhat
+    volumes:
+      - ../scripts:/scripts
+      - hardhat:/hardhat
+
+volumes:
+  hardhat:
+    external: false
