@@ -53,6 +53,8 @@ TO-DO:
 
 1. Once deployed, query the subgraph in the browser at (by default) http://127.0.0.1:8000/subgraphs/name/SetProtocol/set-protocol-v2
 
+    Example query to run can be found in `test/sample-query.txt`
+
 ### [TO-DO] External Deployment (Graph Hosted Service / Subgraph Studio)
 
 TBD
@@ -63,7 +65,7 @@ Available tasks for this project:
 
 | COMMAND [OPTS]                       | DESCRIPTION |
 |--------------------------------------|---------------------------------------------------------------------------------|
-| `clean [-- all\|subgraph\|hardhat]`   | Clean up local subgraph deployment; `all` arg additionally removes all volumes and the Hardhat node. |
+| `clean [-- all\|subgraph\|hardhat]`  | Clean up local subgraph deployment; `all` arg additionally removes all volumes and the Hardhat node. |
 | `deploy-hardhat -- /path/to/file.ts` | Deploy a local Hardhat node and run a test script. Must specify full path to file as task input argument. |
 | `deploy-hosted [-- detach]`          | Build and deploy subgraph on Hosted Service; `detach` runs container detached. |
 | `deploy-local [-- detach]`           | Build and deploy subgraph on local network; `detach` runs container detached. |
