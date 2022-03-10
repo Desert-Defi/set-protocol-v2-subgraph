@@ -1,10 +1,9 @@
-import { log } from "@graphprotocol/graph-ts";
 import { Protocol } from "../../generated/schema";
 
 /**
  * Get existing or index new Protocol entity
  * 
- * @param id Protocol version
+ * @param id    Protocol version
  */
 export function getProtocol(id: string): Protocol {
     let protocol = Protocol.load(id);

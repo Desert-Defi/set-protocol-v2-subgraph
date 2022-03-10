@@ -1,4 +1,4 @@
-import { ComponentExchanged as ComponentExchangedEvent } from '../../generated/templates/TradeModule/TradeModule';
+import { ComponentExchanged as ComponentExchangedEvent } from "../../generated/templates/TradeModule/TradeModule";
 import { rebalances } from "../utils";
 
 /**

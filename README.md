@@ -12,6 +12,7 @@ TO-DO:
     - Update the subgraph schema
     - Update the subgraph mappings
     - Test the subgraph locally
+    - Set up a Postman query
 - Technical Reference
     - Docker compose usage
     - Task usage
@@ -32,13 +33,13 @@ TO-DO:
 
     `task docker-build`
 
-1. Deploy a Hardhat node and custom test script to the network
+1. Deploy a Hardhat node and custom script to the network
 
     `task deploy-hardhat -- /full/path/to/test/script.ts`
 
-    e.g., deploy the StreamingFeeModule contract tests in `./test/` with
+    e.g., deploy the subgraph test state setup script with
 
-    `task deploy-hardhat -- $(pwd)/test/StreamingFeeModule.ts`
+    `task deploy-hardhat -- $(pwd)/test/deploy-state.ts`
 
 1. Monitor the Hardhat node until fully deployed and tests are executed
 
@@ -60,10 +61,10 @@ TBD
 
 Available tasks for this project:
 
-| COMMAND [OPTS]               | DESCRIPTION |
-|-----------------------------------|---------------------------------------------------------------------------------|
-| `clean [-- all|subgraph|hardhat]`    | Clean up local subgraph deployment; `all` arg additionally removes all volumes and the Hardhat node. |
-| `deploy-hardhat -- /path/to/file.ts` | Deploy a local Hardhat node and test script. Must specify full path to file as task input argument. |
+| COMMAND [OPTS]                       | DESCRIPTION |
+|--------------------------------------|---------------------------------------------------------------------------------|
+| `clean [-- all\|subgraph\|hardhat]`   | Clean up local subgraph deployment; `all` arg additionally removes all volumes and the Hardhat node. |
+| `deploy-hardhat -- /path/to/file.ts` | Deploy a local Hardhat node and run a test script. Must specify full path to file as task input argument. |
 | `deploy-hosted [-- detach]`          | Build and deploy subgraph on Hosted Service; `detach` runs container detached. |
 | `deploy-local [-- detach]`           | Build and deploy subgraph on local network; `detach` runs container detached. |
 | `docker-build`                       | Build subgraph Docker image on defined node version base (default: 16-slim). |
@@ -85,11 +86,8 @@ TBD: Ideas to be covered in this section
 
 - Each named dataSource or template entry should be in its own mappings/<entity>.ts file
 - Entity names cannot end with "s" due to conflict with query API (not currently documented)
-- Use `setToken` for fields, not `set`
-
-### Tutorial
-
-TBD
+- Use `setToken` for schema fields, not `set` as will conflict will built-in callers
+- Templates must be initialized appropriately (see `ModuleInitialize` event handler for example)
 
 ### Reference Guide
 
@@ -107,7 +105,7 @@ To Be Completed
 
 `src/mappings/` - Event handlers
 
-`src/entities/` - Entity helper functions
+`src/utils/` - Entity helper functions and other utilities
 
 #### Historical Entities
 
@@ -140,12 +138,12 @@ Prefixes:
 
 #### Event/Call/Block Handlers
 
-Process events, function calls, and block data to update the subgraph. Must register handlers in `templates/subgraph.yaml`.
+Process events, smart contract function calls, and block data to update the subgraph. Must register handlers in `templates/subgraph.yaml`.
 
 #### Template spawners
 
 Not all contract addresses are known at the time of subgraph deployment. To track contracts as they are deployed, use contract templates.
-Tell the subgraph to watch a newly created contract by calling create() on imports from `generated/templates`. Ex the SetToken factory contract (SetTokenCreator) emits an event when a new SetToken is created, so we register that address as a new SetToken contract to watch. Templates are defined in `templates/subgraph.yaml`.
+Tell the subgraph to watch a newly created contract by calling `create()` on imports from `generated/templates`. For example, the SetToken factory contract (SetTokenCreator) emits an event when a new SetToken is created, so we register that address as a new SetToken contract to watch. Templates are defined in `templates/subgraph.yaml`.
 
 ## References
 

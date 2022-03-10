@@ -1,5 +1,18 @@
-import { ManagerEdited as ManagerEditedEvent } from '../../generated/templates/SetToken/SetToken';
-import { managers } from "../utils";
+import {
+  ModuleInitialized as ModuleInitializedEvent,
+  ManagerEdited as ManagerEditedEvent
+} from '../../generated/templates/SetToken/SetToken';
+import { managers, sets } from "../utils";
+
+/**
+ * Handler for ModuleInitialized event
+ * Initializes module templates on a SetToken
+ * 
+ * @param event 
+ */
+ export function handleModuleInitialized(event: ModuleInitializedEvent): void {
+  sets.initModule(event);
+}
 
 /**
  * Handler for ManagerEdited event

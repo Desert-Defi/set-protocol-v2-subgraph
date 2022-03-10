@@ -1,4 +1,3 @@
-import { log } from "@graphprotocol/graph-ts";
 import { Manager, ManagerUpdate } from "../../generated/schema";
 import { ManagerEdited as ManagerEditedEvent } from "../../generated/templates/SetToken/SetToken";
 import { getProtocol } from "../utils/initializers";
@@ -9,8 +8,8 @@ export namespace managers {
   /**
    * Get existing or index new Manager entity
    * 
-   * @param id manager address
-   * @returns
+   * @param id  manager address
+   * @returns   manager entity
    */
   export function getManager(id: string): Manager {
     let manager = Manager.load(id);
@@ -21,7 +20,13 @@ export namespace managers {
     return manager as Manager;
   }
 
-  function createNewManager(id: string): Manager {
+  /**
+   * Create new Manager entity and update protocol manager count
+   * 
+   * @param id  manager address
+   * @returns   manager entity
+   */
+   function createNewManager(id: string): Manager {
     let manager = new Manager(id);
     manager.protocol = constants.PROTOCOL_VERSION;
     manager.save();
@@ -32,18 +37,22 @@ export namespace managers {
     return manager;
   }
 
-  export function update(event: ManagerEditedEvent): void {
+  /**
+   * Index new ManagerEdited event to ManagerUpdate entity and update SetToken
+   * 
+   * @param event
+   */
+   export function update(event: ManagerEditedEvent): void {
     let set = sets.getSetToken(event.address.toHexString());
     let manager = getManager(event.params._newManager.toHexString());
-      
     // Index the event
-    let id = manager.id + "#" + event.address.toHexString();
+    let id = set.id + "#" + event.address.toHexString();
     let managerUpdate = new ManagerUpdate(id);
+    managerUpdate.timestamp = event.block.timestamp;
     managerUpdate.oldManager = set.manager; // old manager
     managerUpdate.newManager = manager.id; //  new manager
     managerUpdate.setToken = set.id;
     managerUpdate.save();
-
     // Save the new manager to the SetToken
     set.manager = manager.id;
     set.save();

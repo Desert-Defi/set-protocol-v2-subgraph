@@ -7,14 +7,18 @@ import {
   FeeActualized as FeeActualizedEvent,
   StreamingFeeUpdated as StreamingFeeUpdatedEvent,
   FeeRecipientUpdated as FeeRecipientUpdatedEvent
-} from '../../generated/templates/StreamingFeeModule/StreamingFeeModule';
-import { sets } from ".";
+} from "../../generated/templates/StreamingFeeModule/StreamingFeeModule";
+import { sets } from "./";
 
 export namespace fees {
 
-  export function addFeeRecipientUpdate(event: FeeRecipientUpdatedEvent): void {
+  /**
+   * Index new FeeRecipientUpdated event to FeeRecipientUpdate entity
+   * 
+   * @param event
+   */
+   export function addFeeRecipientUpdate(event: FeeRecipientUpdatedEvent): void {
     let set = sets.getSetToken(event.params._setToken.toHexString());
-
     // Index the event
     let id = set.id + "#" + event.address.toHexString();
     let recipient = new FeeRecipientUpdate(id);
@@ -24,9 +28,13 @@ export namespace fees {
     recipient.save();
   }
 
-  export function addStreamingFeeAccrue(event: FeeActualizedEvent): void {
+  /**
+   * Index new FeeActualized event to StreamingFeeAccrue entity
+   * 
+   * @param event
+   */
+   export function addStreamingFeeAccrue(event: FeeActualizedEvent): void {
     let set = sets.getSetToken(event.params._setToken.toHexString());
-
     // Index the event
     let id = set.id + "#" + event.address.toHexString();
     let accrue = new StreamingFeeAccrue(id);
@@ -37,9 +45,13 @@ export namespace fees {
     accrue.save();
   }
 
-  export function addStreamingFeeUpdate(event: StreamingFeeUpdatedEvent): void {
+  /**
+   * Index new StreamingFeeUpdated event to StreamingFeeUpdate entity
+   * 
+   * @param event
+   */
+   export function addStreamingFeeUpdate(event: StreamingFeeUpdatedEvent): void {
     let set = sets.getSetToken(event.params._setToken.toHexString());
-
     // Index the event
     let id = set.id + "#" + event.address.toHexString();
     let fee = new StreamingFeeUpdate(id);

@@ -10,11 +10,8 @@ if [ "${DEPLOYMENT}" = "local" ]; then
     bash ./scripts/wait-for-it.sh ${GRAPH_NODE_IP} -t 180
 fi
 
-# Instantiate the environment based on target network (e.g., hardhat, hosted)
-npx ts-node ./scripts/generate-deployment.ts "${NETWORK_NAME}"
-
-# Run graph codegen to produce intermediate artifacts for development
-npx graph codegen
+# Generate schema artifacts
+sh ./scripts/gen-schema.sh
 
 # Set access token param if provided
 if [ -n "${ACCESS_TOKEN+1}" ]; then

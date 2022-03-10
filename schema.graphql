@@ -14,8 +14,7 @@ type Protocol @entity {
 type Manager @entity {
   # manager address
   id: ID!
-  # this is redundant, remove
-  #address: String!
+  # protocol version
   protocol: Protocol!
   # derived fields
   setTokens: [SetToken!]! @derivedFrom(field: "manager")
@@ -24,13 +23,12 @@ type Manager @entity {
 type SetToken @entity {
   # contract address
   id: ID!
+  # protocol version  
   protocol: Protocol!
   # name of Set
   name: String!
   # symbol of Set
   symbol: String!
-  # contract address; duplicate of id, consider removing
-  #address: String!
   # block timestamp
   inception: BigInt!
   # manager address
@@ -44,46 +42,69 @@ type SetToken @entity {
 }
 
 type FeeRecipientUpdate @entity {
+  # setToken.id + "#" + transaction.id
   id: ID!
+  # timestamp of transaction
   timestamp: BigInt!
+  # address of new recipient
   address: String!
   setToken: SetToken!
 }
 
 type ManagerUpdate @entity {
+  # setToken.id + "#" + transaction.id
   id: ID!
+  # timestamp of transaction
   timestamp: BigInt!
+  # address of old manager
   oldManager: String!
+  # address of new manager
   newManager: String!
+  # associated SetToken
   setToken: SetToken!
 }
 
 type StreamingFeeAccrue @entity {
-  # transaction.id + SetToken.txCount
+  # setToken.id + "#" + transaction.id
   id: ID!
   # timestamp of transaction
   timestamp: BigInt!
-  #address: String!
+  # amount of Sets accrued to manager as fee
   managerFee: BigInt!
+  # amount of Sets accrued to protocol as fee
   protocolFee: BigInt!
+  # associated SetToken
   setToken: SetToken!
 }
 
 type StreamingFeeUpdate @entity {
+  # setToken.id + "#" + transaction.id
   id: ID!
+  # timestamp of transaction
   timestamp: BigInt!
+  # new streaming fee
   fee: BigInt!
+  # associated SetToken
   setToken: SetToken!
 }
 
 type RebalanceTrade @entity {
+  # setToken.id + "#" + transaction.id
   id: ID!
+  # timestamp of transaction
   timestamp: BigInt!
+  # name of the exchange in integrations registry
   exchange: String!
+  # address of token sent to exchange
   sendToken: String!
+  # address of token received from exchange
   receiveToken: String!
+  # net total tokens sent
   totalSendAmount: BigInt!
+  # net total tokens received
   totalReceiveAmount: BigInt!
+  # protocol fee
   fee: BigInt!
+  # associated SetToken
   setToken: SetToken!
 }

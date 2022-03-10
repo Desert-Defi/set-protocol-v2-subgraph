@@ -6,6 +6,7 @@ import {
 import { fees } from "../utils";
 
 /**
+ * Handler for the FeeActualized event
  * Indexes the fee accrue event
  * 
  * @param event 
@@ -15,6 +16,7 @@ export function handleFeeActualized(event: FeeActualizedEvent): void {
 }
 
 /**
+ * Handler for the StreamingFeeUpdated event
  * Indexes the streaming fee update event
  * 
  * @param event 
@@ -24,6 +26,7 @@ export function handleFeeActualized(event: FeeActualizedEvent): void {
 }
 
 /**
+ * Handler for the FeeRecipientUpdated event
  * Indexes the fee recipient update event
  * 
  * @param event 

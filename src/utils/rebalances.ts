@@ -1,12 +1,16 @@
 import { RebalanceTrade } from "../../generated/schema";
-import { ComponentExchanged as ComponentExchangedEvent } from '../../generated/templates/TradeModule/TradeModule';
-import { sets } from ".";
+import { ComponentExchanged as ComponentExchangedEvent } from "../../generated/templates/TradeModule/TradeModule";
+import { sets } from "./";
 
 export namespace rebalances {
 
-  export function addRebalanceTrade(event: ComponentExchangedEvent): void {
+  /**
+   * Index new ComponentExchanged event to RebalanceTrade entity
+   * 
+   * @param event
+   */
+   export function addRebalanceTrade(event: ComponentExchangedEvent): void {
     let set = sets.getSetToken(event.params._setToken.toHexString());
-
     // Index the event
     let id = set.id + "#" + event.address.toHexString();
     let trade = new RebalanceTrade(id);

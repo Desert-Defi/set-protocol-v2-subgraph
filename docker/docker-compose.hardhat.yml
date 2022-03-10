@@ -6,7 +6,7 @@ services:
     image: ${HARDHAT_IMAGE_NAME}:node-${NODE_VER}
     environment:
       HARDHAT_PORT: ${HARDHAT_PORT:-"8545"}
-      TEST_SCRIPT: ${TEST_SCRIPT:-""}
+      DEPLOY_SCRIPT: ${DEPLOY_SCRIPT:-""}
     working_dir: /app
     volumes:
       - ../scripts:/app/scripts

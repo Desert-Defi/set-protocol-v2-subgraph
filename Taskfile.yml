@@ -28,12 +28,12 @@ tasks:
     desc: "Deploy a local Hardhat node and test script. Must specify full path to file as task input argument."
     dir: docker/
     cmds:
-      - docker-compose -f docker-compose.hardhat.yml run --name {{.HARDHAT_IP}} --rm -w /app -v {{.CLI_ARGS}}:/tmp/{{.TEST_SCRIPT}} hardhat-build bash /app/scripts/deploy-hardhat.sh
+      - docker-compose -f docker-compose.hardhat.yml run --name {{.HARDHAT_IP}} --rm -w /app -v {{.CLI_ARGS}}:/tmp/{{.DEPLOY_SCRIPT}} hardhat-build bash /app/scripts/deploy-hardhat.sh
     vars:
-      TEST_SCRIPT:
+      DEPLOY_SCRIPT:
         sh: basename "{{.CLI_ARGS}}"
     env:
-      TEST_SCRIPT: "{{.TEST_SCRIPT}}"
+      DEPLOY_SCRIPT: "{{.DEPLOY_SCRIPT}}"
 
   deploy-hosted:
     # TO-DO: untested

@@ -44,6 +44,8 @@ templates:
         - name: SetToken
           file: ./abis/SetToken.json
       eventHandlers:
+        - event: ModuleInitialized(indexed address)
+          handler: handleModuleInitialized
         - event: ManagerEdited(address,address)
           handler: handleManagerEdited
   - name: TradeModule
@@ -57,7 +59,7 @@ templates:
       language: wasm/assemblyscript
       file: ./src/mappings/TradeModule.ts
       entities:
-        - ComponentExchanged
+        - RebalanceTrade
       abis:
         - name: TradeModule
           file: ./abis/TradeModule.json
