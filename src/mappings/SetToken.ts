@@ -1,7 +1,7 @@
 import {
   ModuleInitialized as ModuleInitializedEvent,
   ManagerEdited as ManagerEditedEvent
-} from '../../generated/templates/SetToken/SetToken';
+} from "../../generated/templates/SetToken/SetToken";
 import { managers, sets } from "../utils";
 
 /**

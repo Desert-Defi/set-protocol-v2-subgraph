@@ -11,7 +11,17 @@ type Protocol @entity {
   setTokens: [SetToken!]! @derivedFrom(field: "protocol")
 }
 
+# NOTE: This entity is depcrecated and will be removed
+type SetTokenCount @entity {
+  id: ID!
+  count: BigInt!
+}
+
 type Manager @entity {
+
+  # NOTE: This field is deprecated and will be removed
+  address: String!
+
   # manager address
   id: ID!
   # protocol version
@@ -21,6 +31,10 @@ type Manager @entity {
 }
 
 type SetToken @entity {
+
+  # NOTE: This field is deprecated and will be removed
+  address: String!
+
   # contract address
   id: ID!
   # protocol version  
@@ -42,7 +56,7 @@ type SetToken @entity {
 }
 
 type FeeRecipientUpdate @entity {
-  # setToken.id + "#" + transaction.id
+  # transaction hash
   id: ID!
   # timestamp of transaction
   timestamp: BigInt!
@@ -52,7 +66,7 @@ type FeeRecipientUpdate @entity {
 }
 
 type ManagerUpdate @entity {
-  # setToken.id + "#" + transaction.id
+  # transaction hash
   id: ID!
   # timestamp of transaction
   timestamp: BigInt!
@@ -65,7 +79,7 @@ type ManagerUpdate @entity {
 }
 
 type StreamingFeeAccrue @entity {
-  # setToken.id + "#" + transaction.id
+  # transaction hash
   id: ID!
   # timestamp of transaction
   timestamp: BigInt!
@@ -78,7 +92,7 @@ type StreamingFeeAccrue @entity {
 }
 
 type StreamingFeeUpdate @entity {
-  # setToken.id + "#" + transaction.id
+  # transaction hash
   id: ID!
   # timestamp of transaction
   timestamp: BigInt!
@@ -89,7 +103,7 @@ type StreamingFeeUpdate @entity {
 }
 
 type RebalanceTrade @entity {
-  # setToken.id + "#" + transaction.id
+  # transaction hash
   id: ID!
   # timestamp of transaction
   timestamp: BigInt!

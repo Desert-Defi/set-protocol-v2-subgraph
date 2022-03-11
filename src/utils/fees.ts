@@ -20,7 +20,7 @@ export namespace fees {
    export function addFeeRecipientUpdate(event: FeeRecipientUpdatedEvent): void {
     let set = sets.getSetToken(event.params._setToken.toHexString());
     // Index the event
-    let id = set.id + "#" + event.address.toHexString();
+    let id = event.transaction.hash.toHexString();
     let recipient = new FeeRecipientUpdate(id);
     recipient.timestamp = event.block.timestamp;
     recipient.address = event.params._newFeeRecipient.toHexString();
@@ -36,7 +36,7 @@ export namespace fees {
    export function addStreamingFeeAccrue(event: FeeActualizedEvent): void {
     let set = sets.getSetToken(event.params._setToken.toHexString());
     // Index the event
-    let id = set.id + "#" + event.address.toHexString();
+    let id = event.transaction.hash.toHexString();
     let accrue = new StreamingFeeAccrue(id);
     accrue.timestamp = event.block.timestamp;
     accrue.managerFee = event.params._managerFee;
@@ -53,7 +53,7 @@ export namespace fees {
    export function addStreamingFeeUpdate(event: StreamingFeeUpdatedEvent): void {
     let set = sets.getSetToken(event.params._setToken.toHexString());
     // Index the event
-    let id = set.id + "#" + event.address.toHexString();
+    let id = event.transaction.hash.toHexString();
     let fee = new StreamingFeeUpdate(id);
     fee.timestamp = event.block.timestamp;
     fee.fee = event.params._newStreamingFee;

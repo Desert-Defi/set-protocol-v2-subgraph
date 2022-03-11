@@ -32,6 +32,7 @@ export namespace sets {
     let id = event.params._setToken.toHexString();
     let set = new SetToken(id);
     set.protocol = constants.PROTOCOL_VERSION;
+    set.address = id; // NOTE: The set.address field will be deprecated on new subgraph sync
     set.inception = event.block.timestamp;
     set.manager = managers.getManager(event.params._manager.toHexString()).id;
     set.name = event.params._name;

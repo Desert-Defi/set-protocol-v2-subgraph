@@ -28,6 +28,7 @@ export namespace managers {
    */
    function createNewManager(id: string): Manager {
     let manager = new Manager(id);
+    manager.address = id; // NOTE: The manager.address field will be deprecated on new subgraph sync
     manager.protocol = constants.PROTOCOL_VERSION;
     manager.save();
     // Increment protocol absolute manager count
@@ -46,7 +47,7 @@ export namespace managers {
     let set = sets.getSetToken(event.address.toHexString());
     let manager = getManager(event.params._newManager.toHexString());
     // Index the event
-    let id = set.id + "#" + event.address.toHexString();
+    let id = event.transaction.hash.toHexString();
     let managerUpdate = new ManagerUpdate(id);
     managerUpdate.timestamp = event.block.timestamp;
     managerUpdate.oldManager = set.manager; // old manager

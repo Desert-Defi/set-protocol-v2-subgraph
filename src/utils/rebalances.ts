@@ -12,7 +12,7 @@ export namespace rebalances {
    export function addRebalanceTrade(event: ComponentExchangedEvent): void {
     let set = sets.getSetToken(event.params._setToken.toHexString());
     // Index the event
-    let id = set.id + "#" + event.address.toHexString();
+    let id = event.transaction.hash.toHexString();
     let trade = new RebalanceTrade(id);
     trade.timestamp = event.block.timestamp;
     trade.exchange = event.params._exchangeAdapter.toHexString();

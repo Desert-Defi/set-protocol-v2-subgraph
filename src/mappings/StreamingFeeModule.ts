@@ -2,7 +2,7 @@ import {
   FeeActualized as FeeActualizedEvent,
   StreamingFeeUpdated as StreamingFeeUpdatedEvent,
   FeeRecipientUpdated as FeeRecipientUpdatedEvent
-} from '../../generated/templates/StreamingFeeModule/StreamingFeeModule';
+} from "../../generated/templates/StreamingFeeModule/StreamingFeeModule";
 import { fees } from "../utils";
 
 /**
