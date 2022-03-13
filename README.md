@@ -3,7 +3,7 @@
 Indexer of Set Protocol v2 events. Built on [The Graph](https://thegraph.com/).
 
 <!--
-TO-DO:
+[TO-DO] CONTENTS (herein or external):
 - Tutorials
     - Deploy a local subgraph
     - Deploy a subgraph to Hosted Service
@@ -57,21 +57,27 @@ TO-DO:
 
 ### [TO-DO] External Deployment (Graph Hosted Service / Subgraph Studio)
 
-TBD
+1. Build the Set Protocol Docker base and hardhat images
+
+    `task docker-build`
+
+1. Deploy hosted subgraph
+
+    `task deploy-hosted [-- SUBGRAPH_ACCESS_TOKEN]`
 
 ## USAGE
 
 Available tasks for this project:
 
-| COMMAND [OPTS]                       | DESCRIPTION |
-|--------------------------------------|---------------------------------------------------------------------------------|
-| `clean [-- all\|subgraph\|hardhat]`  | Clean up local subgraph deployment; `all` arg additionally removes all volumes and the Hardhat node. |
-| `deploy-hardhat -- /path/to/file.ts` | Deploy a local Hardhat node and run a test script. Must specify full path to file as task input argument. |
-| `deploy-hosted [-- detach]`          | Build and deploy subgraph on Hosted Service; `detach` runs container detached. |
-| `deploy-local [-- detach]`           | Build and deploy subgraph on local network; `detach` runs container detached. |
-| `docker-build`                       | Build subgraph Docker image on defined node version base (default: 16-slim). |
-| `gen-abi`                            | Pull latest Set Protocol ABIs into the build environment. |
-| `gen-schema`                         | Compile the subgraph schema but do not deploy the subgraph. |
+| COMMAND [OPTS]                             | DESCRIPTION |
+|--------------------------------------------|---------------------------------------------------------------------------------|
+| `clean [-- all\|subgraph\|hardhat]`        | Clean up local subgraph deployment; `all` arg additionally removes all volumes and the Hardhat node. |
+| `deploy-hardhat -- /path/to/file.ts`       | Deploy a local Hardhat node and run a test script. Must specify full path to file as task input argument. |
+| `deploy-hosted [-- SUBGRAPH_ACCESS_TOKEN]` | Build and deploy subgraph on Hosted Service. `SUBGRAPH_ACCESS_TOKEN` must be provided or defined in a private dotenv. |
+| `deploy-local [-- detach]`                 | Build and deploy subgraph on local network; `detach` runs container detached. |
+| `docker-build`                             | Build subgraph Docker image on defined node version base (default: 16-slim). |
+| `gen-abi`                                  | Pull latest Set Protocol ABIs into the build environment. |
+| `gen-schema`                               | Compile the subgraph schema but do not deploy the subgraph. |
 
 ## [TO-DO] ADVANCED DEPLOYMENT GUIDES
 
@@ -90,6 +96,13 @@ TBD: Ideas to be covered in this section
 - Entity names cannot end with "s" due to conflict with query API (not currently documented)
 - Use `setToken` for schema fields, not `set` as will conflict will built-in callers
 - Templates must be initialized appropriately (see `ModuleInitialize` event handler for example)
+
+
+`ModuleInitialized` Event Notes
+- `event.address` - `ModuleInitialized` module contract address
+- `event.transaction.hash` - hash of the call transaction that triggered the event
+- `event.params._module` - the initialized module contract address
+
 
 ### Reference Guide
 

@@ -38,7 +38,7 @@ services:
     depends_on:
       - graph-node
     environment:
-      DEPLOYMENT: ${DEPLOYMENT:-""}
+      DEPLOYMENT: ${DEPLOYMENT:-"local"}
       IPFS_IP: ${IPFS_IP:-""}
       GRAPH_NODE_IP: ${GRAPH_NODE_IP:-""}
       ACCESS_TOKEN: ${ACCESS_TOKEN:-""}

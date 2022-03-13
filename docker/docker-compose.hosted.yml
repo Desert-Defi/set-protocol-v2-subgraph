@@ -5,10 +5,10 @@ services:
   setprotocol-subgraph:
     image: ${SET_IMAGE_NAME}:node-${NODE_VER}
     environment:
-      DEPLOYMENT: ${DEPLOYMENT:-""}
+      DEPLOYMENT: ${DEPLOYMENT:-"hosted"}
       IPFS_IP: ${IPFS_HOSTED:-""}
       GRAPH_NODE_IP: ${GRAPH_NODE_HOSTED:-""}
-      ACCESS_TOKEN: ${ACCESS_TOKEN:-""}
+      ACCESS_TOKEN: ${ACCESS_TOKEN}
       SUBGRAPH_VERSION: ${SUBGRAPH_VERSION:-""}
       NETWORK_NAME: ${NETWORK_NAME:-""}
       GITHUB_REPO: ${GITHUB_REPO:-""}
@@ -18,7 +18,6 @@ services:
       - setprotocol-subgraph-node_modules:/subgraph/node_modules
     working_dir: /subgraph
     command: "sh ./scripts/deploy.sh"
-    # restart: on-failure:max-retries 5
 
 volumes:
   setprotocol-subgraph-node_modules:

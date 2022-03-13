@@ -19,7 +19,6 @@ dataSources:
       file: ./src/mappings/SetTokenCreator.ts
       entities:
         - Manager
-        - Protocol
         - SetToken
       abis:
         - name: SetTokenCreator
@@ -31,10 +30,11 @@ dataSources:
   # [NOTE] The following set of dataSources reference deprecated SetTokenCreator
   # contracts on Ethereum mainnet tied to deployed SetTokens. When deploying
   # to Ethereum mainnet (and staging), the following smart contracts must be
-  # uncommented and executed.
+  # uncommented and executed as appropriate.
+
   # [TO-DO]
   #   - can single contract definition support multiple source addresses?
-  #   - can we separate this logic to auto-deploy as required?
+  #   - otherwise, separate this logic to auto-deploy as required
 
   # - name: SetTokenCreator-deprecated-staging-mainnet
   #   kind: ethereum/contract
@@ -45,21 +45,15 @@ dataSources:
   #     startBlock: {{startBlock}}
   #   mapping:
   #     kind: ethereum/events
-  #     apiVersion: 0.0.4
+  #     apiVersion: 0.0.6
   #     language: wasm/assemblyscript
   #     file: ./src/mappings/SetTokenCreator.ts
   #     entities:
-  #       - SetToken
   #       - Manager
+  #       - SetToken
   #     abis:
   #       - name: SetTokenCreator
   #         file: ./abis/SetTokenCreator.json
-  #       - name: SetToken
-  #         file: ./abis/SetToken.json
-  #       - name: ERC20
-  #         file: ./abis/ERC20.json
-  #       - name: ERC20_bytes32
-  #         file: ./abis/ERC20_bytes32.json
   #     eventHandlers:
   #       - event: SetTokenCreated(indexed address,address,string,string)
   #         handler: handleSetTokenCreated
@@ -72,24 +66,19 @@ dataSources:
   #     startBlock: {{startBlock}}
   #   mapping:
   #     kind: ethereum/events
-  #     apiVersion: 0.0.4
+  #     apiVersion: 0.0.6
   #     language: wasm/assemblyscript
   #     file: ./src/mappings/SetTokenCreator.ts
   #     entities:
-  #       - SetToken
   #       - Manager
+  #       - SetToken
   #     abis:
   #       - name: SetTokenCreator
   #         file: ./abis/SetTokenCreator.json
-  #       - name: SetToken
-  #         file: ./abis/SetToken.json
-  #       - name: ERC20
-  #         file: ./abis/ERC20.json
-  #       - name: ERC20_bytes32
-  #         file: ./abis/ERC20_bytes32.json
   #     eventHandlers:
   #       - event: SetTokenCreated(indexed address,address,string,string)
   #         handler: handleSetTokenCreated
+
   # - name: SetTokenCreator-deprecated-mainnet
   #   kind: ethereum/contract
   #   network: '{{network}}'
@@ -99,21 +88,15 @@ dataSources:
   #     startBlock: {{startBlock}}
   #   mapping:
   #     kind: ethereum/events
-  #     apiVersion: 0.0.4
+  #     apiVersion: 0.0.6
   #     language: wasm/assemblyscript
   #     file: ./src/mappings/SetTokenCreator.ts
   #     entities:
-  #       - SetToken
   #       - Manager
+  #       - SetToken
   #     abis:
   #       - name: SetTokenCreator
   #         file: ./abis/SetTokenCreator.json
-  #       - name: SetToken
-  #         file: ./abis/SetToken.json
-  #       - name: ERC20
-  #         file: ./abis/ERC20.json
-  #       - name: ERC20_bytes32
-  #         file: ./abis/ERC20_bytes32.json
   #     eventHandlers:
   #       - event: SetTokenCreated(indexed address,address,string,string)
   #         handler: handleSetTokenCreated
@@ -126,21 +109,15 @@ dataSources:
   #     startBlock: {{startBlock}}
   #   mapping:
   #     kind: ethereum/events
-  #     apiVersion: 0.0.4
+  #     apiVersion: 0.0.6
   #     language: wasm/assemblyscript
   #     file: ./src/mappings/SetTokenCreator.ts
   #     entities:
-  #       - SetToken
   #       - Manager
+  #       - SetToken
   #     abis:
   #       - name: SetTokenCreator
   #         file: ./abis/SetTokenCreator.json
-  #       - name: SetToken
-  #         file: ./abis/SetToken.json
-  #       - name: ERC20
-  #         file: ./abis/ERC20.json
-  #       - name: ERC20_bytes32
-  #         file: ./abis/ERC20_bytes32.json
   #     eventHandlers:
   #       - event: SetTokenCreated(indexed address,address,string,string)
   #         handler: handleSetTokenCreated

@@ -11,7 +11,7 @@ import { managers, sets } from "../utils";
  * @param event 
  */
  export function handleModuleInitialized(event: ModuleInitializedEvent): void {
-  sets.initModule(event);
+  sets.createModuleTemplate(event);
 }
 
 /**

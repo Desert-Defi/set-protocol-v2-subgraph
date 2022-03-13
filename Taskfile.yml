@@ -1,6 +1,9 @@
 version: "3"
 
-dotenv: ["./docker/.env"]
+dotenv: [
+  "./docker/custom.env",
+  "./docker/.env",
+]
 
 tasks:
 
@@ -40,11 +43,12 @@ tasks:
     desc: "Build and deploy subgraph on Hosted Service."
     dir: docker/
     cmds:
-      - docker-compose -f docker-compose.hosted.yml up {{.ARGS}}
+      - docker-compose -f docker-compose.hosted.yml up
     vars:
-      ARGS:
-        sh: if [ "{{.CLI_ARGS}}" = "detach" ]; then echo "-d"; else echo ""; fi
+      SUBGRAPH_ACCESS_TOKEN:
+        sh: if [ "{{.CLI_ARGS}}" ]; then echo "{{.CLI_ARGS}}"; else echo "{{.SUBGRAPH_ACCESS_TOKEN}}"; fi
     env:
+      ACCESS_TOKEN: "{{.SUBGRAPH_ACCESS_TOKEN}}"
       DEPLOYMENT: "hosted"
       NETWORK_NAME: "{{.NETWORK_HOSTED}}"
     preconditions:

@@ -56,7 +56,8 @@ async function main() {
     [kyberExchangeAdapter.address],
   );
 
-  // Deploy SetToken with issuanceModule, TradeModule, and StreamingFeeModule
+  // DEPLOY A SETTOKEN (with issuanceModule, TradeModule, and StreamingFeeModule)
+
   let setToken = await setup.createSetToken(
     [setup.wbtc.address],
     [wbtcUnits],
@@ -149,6 +150,88 @@ async function main() {
   // Update Manager
   setToken = setToken.connect(manager1.wallet);
   await setToken.setManager(manager2.address);
+
+
+  // DEPLOY A SECOND SETTOKEN
+
+  let setToken2 = await setup.createSetToken(
+    [setup.wbtc.address],
+    [wbtcUnits],
+    [
+      setup.issuanceModule.address,
+      tradeModule.address,
+      streamingFeeModule.address
+    ],
+    manager3.address,
+    "SetToken2",
+    "SET2"
+  );
+
+  // Update Manager
+  setToken2 = setToken2.connect(manager3.wallet);
+  await setToken2.setManager(manager1.address);
+
+  // Initialize StreamingFeeModule
+  streamingFeePercentage = ether(.015);
+  subjectSettings = {
+    feeRecipient: manager1.address,
+    maxStreamingFeePercentage: ether(.05),
+    streamingFeePercentage: streamingFeePercentage,
+    lastStreamingFeeTimestamp: ZERO,
+  } as StreamingFeeState;
+  streamingFeeModule = streamingFeeModule.connect(manager1.wallet);
+  await streamingFeeModule.initialize(setToken2.address, subjectSettings);
+  await setToken2.isInitializedModule(streamingFeeModule.address);
+
+  // Initialize TradeModule
+  tradeModule = tradeModule.connect(manager1.wallet);
+  await tradeModule.initialize(setToken2.address);
+  await setToken2.isInitializedModule(tradeModule.address);
+
+  // Deploy mock issuance hook and initialize issuance module
+  setup.issuanceModule = setup.issuanceModule.connect(manager1.wallet);
+  // mockPreIssuanceHook = await deployer.mocks.deployManagerIssuanceHookMock();
+  await setup.issuanceModule.initialize(setToken2.address, mockPreIssuanceHook.address);
+  
+  // Transfer WBTC from owner to manager for issuance
+  setup.wbtc = setup.wbtc.connect(owner.wallet);
+  await setup.wbtc.transfer(manager1.address, wbtcUnits.mul(100));
+
+  // Approve WBTC to IssuanceModule
+  setup.wbtc = setup.wbtc.connect(manager1.wallet);
+  await setup.wbtc.approve(setup.issuanceModule.address, ethers.constants.MaxUint256);
+
+  // Issue SetTokens
+  setup.issuanceModule = setup.issuanceModule.connect(owner.wallet);
+  await setup.issuanceModule.issue(setToken2.address, ether(8), owner.address);
+
+  // Redeem SetTokens
+  setToken2 = setToken2.connect(owner.wallet);
+  await setToken2.approve(setup.issuanceModule.address, ethers.constants.MaxUint256);
+  await setup.issuanceModule.redeem(setToken2.address, ether(2), owner.address);
+
+  // Trade on Kyber
+  await tradeModule.trade(
+    setToken2.address,
+    kyberAdapterName,
+    setup.wbtc.address,
+    sourceTokenQuantity,
+    setup.weth.address,
+    subjectMinDestinationQuantity,
+    subjectData
+  );
+
+  // Accrue streaming fee (fast-forward one year)
+  await increaseTimeAsync(subjectTimeFastForward);
+  await streamingFeeModule.accrueFee(setToken2.address);
+
+  // Change fee recipient
+  newFeeRecipient = manager3.address;
+  await streamingFeeModule.updateFeeRecipient(setToken2.address, newFeeRecipient);
+
+  // Update streaming fee
+  streamingFeePercentage = ether(.025);
+  await streamingFeeModule.updateStreamingFee(setToken2.address, streamingFeePercentage);
 
 }
 

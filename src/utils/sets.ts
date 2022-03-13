@@ -1,24 +1,26 @@
 import { log } from "@graphprotocol/graph-ts";
 import { SetToken } from "../../generated/schema";
-import { SetToken as SetTokenTemplate } from "../../generated/templates";
-import { ModuleInitialized as ModuleInitializedEvent } from "../../generated/templates/SetToken/SetToken";
-import { SetTokenCreated as SetTokenCreatedEvent } from "../../generated/SetTokenCreator/SetTokenCreator";
 import {
+  SetToken as SetTokenTemplate,
   StreamingFeeModule as StreamingFeeModuleTemplate,
   TradeModule as TradeModuleTemplate
 } from "../../generated/templates";
+import { ModuleInitialized as ModuleInitializedEvent } from "../../generated/templates/SetToken/SetToken";
+import { SetTokenCreated as SetTokenCreatedEvent } from "../../generated/SetTokenCreator/SetTokenCreator";
 import { constants, managers } from "./";
 
 export namespace sets {
 
   /**
-   * Create new module templates on ModuleInitialized event trigger
+   * Create new module template on ModuleInitialized event trigger
    * 
    * @param event
    */
-   export function initModule(event: ModuleInitializedEvent): void {
-    // TO-DO: This should only trigger the appropriate template creation based
-    //        on the module being initialised; currently triggers all
+   export function createModuleTemplate(event: ModuleInitializedEvent): void {
+    // NOTE: Ideally, this would only trigger the appropriate template creation
+    //       based on the module being initialised; however, as we cannot
+    //       fingerprint the calling module from within the subgraph, it
+    //       currently triggers for all modules, creating templates never used
     TradeModuleTemplate.create(event.params._module);
     StreamingFeeModuleTemplate.create(event.params._module);
   }
@@ -39,6 +41,7 @@ export namespace sets {
     set.symbol = event.params._symbol;
     set.save();
 
+    // Instantiate the SetToken template
     SetTokenTemplate.create(event.params._setToken);
   }
 
