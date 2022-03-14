@@ -1,11 +1,13 @@
 import { log } from "@graphprotocol/graph-ts";
 import { SetTokenCreated as SetTokenCreatedEvent } from "../../generated/SetTokenCreator/SetTokenCreator";
+import { SetToken as SetTokenTemplate } from "../../generated/templates";
 import { constants, sets } from "../utils";
 import { getProtocol } from "../utils/initializers";
 
 // NOTE: These imports are deprecated and will be removed on new subgraph sync
 import { SetTokenCount } from "../../generated/schema";
 import { BigInt } from "@graphprotocol/graph-ts";
+
 /**
  * Handler for SetTokenCreated event in SetToken contract
  * Indexes the new SetToken and updates the total absolute token count
@@ -13,6 +15,9 @@ import { BigInt } from "@graphprotocol/graph-ts";
  * @param event
  */
  export function handleSetTokenCreated(event: SetTokenCreatedEvent): void {
+  // Instantiate the SetToken template
+  SetTokenTemplate.create(event.params._setToken);
+  // Create the SetToken
   sets.createSetToken(event);
   // TO-DO: The PROTOCOL_VERSION logic should come from the SetToken creation
   //        contract event if it's something we care about, instead of as a

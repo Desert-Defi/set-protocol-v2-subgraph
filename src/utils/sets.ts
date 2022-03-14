@@ -1,7 +1,6 @@
 import { log } from "@graphprotocol/graph-ts";
 import { SetToken } from "../../generated/schema";
 import {
-  SetToken as SetTokenTemplate,
   StreamingFeeModule as StreamingFeeModuleTemplate,
   TradeModule as TradeModuleTemplate
 } from "../../generated/templates";
@@ -40,9 +39,6 @@ export namespace sets {
     set.name = event.params._name;
     set.symbol = event.params._symbol;
     set.save();
-
-    // Instantiate the SetToken template
-    SetTokenTemplate.create(event.params._setToken);
   }
 
   /**
