@@ -1,0 +1,50 @@
+{
+  protocols {
+    id
+    setTokenCount
+    managerCount
+    setTokens {
+      id
+      manager {
+        id
+        protocol {
+          id
+        }
+      }
+      name
+      symbol
+      managerUpdates {
+        id
+        timestamp
+        oldManager
+        newManager
+      }
+      feeRecipientUpdates {
+        id
+        timestamp
+        address
+      }
+      streamingFeeAccrues {
+        id
+        timestamp
+        managerFee
+        protocolFee
+      }
+      streamingFeeUpdates {
+        id
+        timestamp
+        fee
+      }
+      rebalanceTrades {
+        id
+        timestamp
+        exchange
+        sendToken
+        receiveToken
+        totalSendAmount
+        totalReceiveAmount
+        fee
+      }
+    }
+  }
+}

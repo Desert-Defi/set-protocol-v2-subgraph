@@ -2,6 +2,25 @@
 
 Indexer of Set Protocol v2 events. Built on [The Graph](https://thegraph.com/).
 
+<!--
+TO-DO:
+- Tutorials
+    - Deploy a local subgraph
+    - Deploy a subgraph to Hosted Service
+    - Deploy a subgraph to Subgraph Studio
+- How-To Guides
+    - Update the subgraph schema
+    - Update the subgraph mappings
+    - Test the subgraph locally
+    - Set up a Postman query
+- Technical Reference
+    - Docker compose usage
+    - Task usage
+- Background Information
+    - Schema structure
+    - Query structure
+-->
+
 ## SETUP
 
 ### Requirements:
@@ -10,19 +29,21 @@ Indexer of Set Protocol v2 events. Built on [The Graph](https://thegraph.com/).
 
 ### Local Deployment (Hardhat)
 
-1. Build the subgraph Docker image
+1. Build the Set Protocol Docker base and hardhat images
 
     `task docker-build`
 
-1. Deploy a Hardhat node (use `task deploy-hardhat -- detach` to start container in detached mode)
+1. Deploy a Hardhat node and custom script to the network
 
-    `task deploy-hardhat`
+    `task deploy-hardhat -- /full/path/to/test/script.ts`
 
-1. Monitor the Hardhat node until fully deployed and tests are executed, e.g., if running detached use
+    e.g., deploy the subgraph test state setup script with
 
-    `docker logs docker-hardhat-1 --follow`
+    `task deploy-hardhat -- $(pwd)/test/deploy-state.ts`
 
-1. Compile the Set Protocol ABIs
+1. Monitor the Hardhat node until fully deployed and tests are executed
+
+1. In a new terminal, compile the Set Protocol ABIs
 
     `task gen-abi`
 
@@ -32,6 +53,8 @@ Indexer of Set Protocol v2 events. Built on [The Graph](https://thegraph.com/).
 
 1. Once deployed, query the subgraph in the browser at (by default) http://127.0.0.1:8000/subgraphs/name/SetProtocol/set-protocol-v2
 
+    Example query to run can be found in `test/sample-query.txt`
+
 ### [TO-DO] External Deployment (Graph Hosted Service / Subgraph Studio)
 
 TBD
@@ -40,19 +63,19 @@ TBD
 
 Available tasks for this project:
 
-| COMMAND [OPTS]               | DESCRIPTION |
-|------------------------------|---------------------------------------------------------------------------------|
-| `clean [-- all]`             | Clean up local subgraph deployment; `all` arg additionally removes all volumes and the Hardhat node. |
-| `deploy-hardhat [-- detach]` | Deploy a Hardhat node and subgraph tests; `detach` runs container detached. |
-| `deploy-hosted [-- detach]`  | Build and deploy subgraph on Hosted Service; `detach` runs container detached. |
-| `deploy-local [-- detach]`   | Build and deploy subgraph on local network; `detach` runs container detached. |
-| `destroy-hardhat`            | Tear down the deployed Hardhat node. |
-| `docker-build`               | Build subgraph Docker image on defined node version base (default: 16-slim). |
-| `gen-abi`                    | Pull latest Set Protocol ABIs into the build environment. |
+| COMMAND [OPTS]                       | DESCRIPTION |
+|--------------------------------------|---------------------------------------------------------------------------------|
+| `clean [-- all\|subgraph\|hardhat]`  | Clean up local subgraph deployment; `all` arg additionally removes all volumes and the Hardhat node. |
+| `deploy-hardhat -- /path/to/file.ts` | Deploy a local Hardhat node and run a test script. Must specify full path to file as task input argument. |
+| `deploy-hosted [-- detach]`          | Build and deploy subgraph on Hosted Service; `detach` runs container detached. |
+| `deploy-local [-- detach]`           | Build and deploy subgraph on local network; `detach` runs container detached. |
+| `docker-build`                       | Build subgraph Docker image on defined node version base (default: 16-slim). |
+| `gen-abi`                            | Pull latest Set Protocol ABIs into the build environment. |
+| `gen-schema`                         | Compile the subgraph schema but do not deploy the subgraph. |
 
 ## [TO-DO] ADVANCED DEPLOYMENT GUIDES
 
-TBD: Things to be covered in this section
+TBD: Ideas to be covered in this section
 
 - custom override of args (requires custom untracked .env configs or CLI arg overrides)
 - the [Set Protocol V2 repo](https://github.com/SetProtocol/set-protocol-v2.git) currently requires node <= 16; therefore, Node 16 is the default target base image used in the Subgraph Docker image.
@@ -61,9 +84,12 @@ TBD: Things to be covered in this section
 
 ## [TO-DO] SUBGRAPH DEVELOPMENT
 
-### Tutorial
+### [TEMP] Dev Notes
 
-TBD
+- Each named dataSource or template entry should be in its own mappings/<entity>.ts file
+- Entity names cannot end with "s" due to conflict with query API (not currently documented)
+- Use `setToken` for schema fields, not `set` as will conflict will built-in callers
+- Templates must be initialized appropriately (see `ModuleInitialize` event handler for example)
 
 ### Reference Guide
 
@@ -81,7 +107,7 @@ To Be Completed
 
 `src/mappings/` - Event handlers
 
-`src/entities/` - Entity helper functions
+`src/utils/` - Entity helper functions and other utilities
 
 #### Historical Entities
 
@@ -114,12 +140,12 @@ Prefixes:
 
 #### Event/Call/Block Handlers
 
-Process events, function calls, and block data to update the subgraph. Must register handlers in `templates/subgraph.yaml`.
+Process events, smart contract function calls, and block data to update the subgraph. Must register handlers in `templates/subgraph.yaml`.
 
 #### Template spawners
 
 Not all contract addresses are known at the time of subgraph deployment. To track contracts as they are deployed, use contract templates.
-Tell the subgraph to watch a newly created contract by calling create() on imports from `generated/templates`. Ex the SetToken factory contract (SetTokenCreator) emits an event when a new SetToken is created, so we register that address as a new SetToken contract to watch. Templates are defined in `templates/subgraph.yaml`.
+Tell the subgraph to watch a newly created contract by calling `create()` on imports from `generated/templates`. For example, the SetToken factory contract (SetTokenCreator) emits an event when a new SetToken is created, so we register that address as a new SetToken contract to watch. Templates are defined in `templates/subgraph.yaml`.
 
 ## References
 

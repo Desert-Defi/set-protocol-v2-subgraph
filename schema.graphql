@@ -1,19 +1,124 @@
-type Manager @entity {
+type Protocol @entity {
+  # protocol version
   id: ID!
+  # cumulative number of managers
+  # TO-DO: does not take into account inactive managers with zero SetTokens
+  managerCount: Int!
+  # cumulative number of SetTokens created
+  setTokenCount: Int!
+  # derived fields
+  managers: [Manager!]! @derivedFrom(field: "protocol")
+  setTokens: [SetToken!]! @derivedFrom(field: "protocol")
+}
+
+# NOTE: This entity is depcrecated and will be removed
+type SetTokenCount @entity {
+  id: ID!
+  count: BigInt!
+}
+
+type Manager @entity {
+
+  # NOTE: This field is deprecated and will be removed
   address: String!
+
+  # manager address
+  id: ID!
+  # protocol version
+  protocol: Protocol!
+  # derived fields
   setTokens: [SetToken!]! @derivedFrom(field: "manager")
 }
 
 type SetToken @entity {
-  id: ID!
-  name: String!
-  symbol: String!
+
+  # NOTE: This field is deprecated and will be removed
   address: String!
+
+  # contract address
+  id: ID!
+  # protocol version  
+  protocol: Protocol!
+  # name of Set
+  name: String!
+  # symbol of Set
+  symbol: String!
+  # block timestamp
   inception: BigInt!
+  # manager address
   manager: Manager!
+  # derived fields
+  feeRecipientUpdates: [FeeRecipientUpdate!]! @derivedFrom(field: "setToken")
+  managerUpdates: [ManagerUpdate!]! @derivedFrom(field: "setToken")
+  streamingFeeAccrues: [StreamingFeeAccrue!]! @derivedFrom(field: "setToken")
+  streamingFeeUpdates: [StreamingFeeUpdate!]! @derivedFrom(field: "setToken")
+  rebalanceTrades: [RebalanceTrade!]! @derivedFrom(field: "setToken")
 }
 
-type SetTokenCount @entity {
+type FeeRecipientUpdate @entity {
+  # transaction hash
   id: ID!
-  count: BigInt!
+  # timestamp of transaction
+  timestamp: BigInt!
+  # address of new recipient
+  address: String!
+  setToken: SetToken!
+}
+
+type ManagerUpdate @entity {
+  # transaction hash
+  id: ID!
+  # timestamp of transaction
+  timestamp: BigInt!
+  # address of old manager
+  oldManager: String!
+  # address of new manager
+  newManager: String!
+  # associated SetToken
+  setToken: SetToken!
+}
+
+type StreamingFeeAccrue @entity {
+  # transaction hash
+  id: ID!
+  # timestamp of transaction
+  timestamp: BigInt!
+  # amount of Sets accrued to manager as fee
+  managerFee: BigInt!
+  # amount of Sets accrued to protocol as fee
+  protocolFee: BigInt!
+  # associated SetToken
+  setToken: SetToken!
+}
+
+type StreamingFeeUpdate @entity {
+  # transaction hash
+  id: ID!
+  # timestamp of transaction
+  timestamp: BigInt!
+  # new streaming fee
+  fee: BigInt!
+  # associated SetToken
+  setToken: SetToken!
+}
+
+type RebalanceTrade @entity {
+  # transaction hash
+  id: ID!
+  # timestamp of transaction
+  timestamp: BigInt!
+  # name of the exchange in integrations registry
+  exchange: String!
+  # address of token sent to exchange
+  sendToken: String!
+  # address of token received from exchange
+  receiveToken: String!
+  # net total tokens sent
+  totalSendAmount: BigInt!
+  # net total tokens received
+  totalReceiveAmount: BigInt!
+  # protocol fee
+  fee: BigInt!
+  # associated SetToken
+  setToken: SetToken!
 }

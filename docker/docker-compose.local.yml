@@ -16,7 +16,7 @@ services:
       postgres_db: graph-node
       ipfs: 'ipfs:${IPFS_PORT}'
       GRAPH_LOG: info
-      ethereum: hardhat:${HARDHAT_IP}:${HARDHAT_PORT}
+      ethereum: hardhat:http://${HARDHAT_IP}:${HARDHAT_PORT}
 
   ipfs:
     image: ipfs/go-ipfs:v0.4.23
@@ -38,14 +38,14 @@ services:
     depends_on:
       - graph-node
     environment:
-      DEPLOYMENT: ${DEPLOYMENT}
-      IPFS_IP: ${IPFS_IP}
-      GRAPH_NODE_IP: ${GRAPH_NODE_IP}
-      ACCESS_TOKEN: ${ACCESS_TOKEN}
-      SUBGRAPH_VERSION: ${SUBGRAPH_VERSION}
-      NETWORK_NAME: ${NETWORK_NAME}
-      GITHUB_REPO: ${GITHUB_REPO}
-      GRAPH_NAME: ${GRAPH_NAME}
+      DEPLOYMENT: ${DEPLOYMENT:-""}
+      IPFS_IP: ${IPFS_IP:-""}
+      GRAPH_NODE_IP: ${GRAPH_NODE_IP:-""}
+      ACCESS_TOKEN: ${ACCESS_TOKEN:-""}
+      SUBGRAPH_VERSION: ${SUBGRAPH_VERSION:-""}
+      NETWORK_NAME: ${NETWORK_NAME:-""}
+      GITHUB_REPO: ${GITHUB_REPO:-""}
+      GRAPH_NAME: ${GRAPH_NAME:-""}
     volumes:
       - ../:/subgraph
       - setprotocol-subgraph-node_modules:/subgraph/node_modules

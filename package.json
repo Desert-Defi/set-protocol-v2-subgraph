@@ -3,12 +3,5 @@
   "version": "0.1.0",
   "repository": "https://github.com/SetProtocol/set-protocol-v2-subgraph",
   "description": "Set Protocol subgraph deployment repo",
-  "license": "MIT",
-  "dependencies": {
-    "@graphprotocol/graph-cli": "^0.26.0",
-    "@graphprotocol/graph-ts": "^0.24.1",
-    "handlebars": "^4.7.7",
-    "ts-node": "^10.5.0",
-    "typescript": "^4.5.5"
-  }
+  "license": "MIT"
 }

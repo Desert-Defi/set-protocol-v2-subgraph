@@ -5,22 +5,35 @@ dotenv: ["./docker/.env"]
 tasks:
 
   clean:
-    desc: "Clean up local subgraph deployment; deletes all locally deployed subgraph data."
+    desc: "Clean up deployments. Options: 'subgraph' (default), 'hardhat', or 'all'."
     dir: docker/
     cmds:
-      - docker-compose -f docker-compose.local.yml down --volumes {{.ARGS}}
+      - docker-compose -f {{.TARGET}} down --volumes {{.ARGS}}
+      - rm -rf ../generated ../build
     vars:
+      TARGET:
+        sh: if [ "{{.CLI_ARGS}}" = "hardhat" ]; then
+              echo "docker-compose.hardhat.yml";
+            else
+              echo "docker-compose.local.yml";
+            fi
       ARGS:
-        sh: if [ "{{.CLI_ARGS}}" = "all" ]; then echo "--remove-orphans"; else echo ""; fi
+        sh: if [ "{{.CLI_ARGS}}" = "all" ]; then
+              echo "--remove-orphans";
+            else
+              echo "";
+            fi
 
   deploy-hardhat:
-    desc: "Deploy a Hardhat node and subgraph tests."
+    desc: "Deploy a local Hardhat node and test script. Must specify full path to file as task input argument."
     dir: docker/
     cmds:
-      - docker-compose -f docker-compose.hardhat.yml up {{.ARGS}}
+      - docker-compose -f docker-compose.hardhat.yml run --name {{.HARDHAT_IP}} --rm -w /app -v {{.CLI_ARGS}}:/tmp/{{.DEPLOY_SCRIPT}} hardhat-build bash /app/scripts/deploy-hardhat.sh
     vars:
-      ARGS:
-        sh: if [ "{{.CLI_ARGS}}" = "detach" ]; then echo "-d"; else echo ""; fi
+      DEPLOY_SCRIPT:
+        sh: basename "{{.CLI_ARGS}}"
+    env:
+      DEPLOY_SCRIPT: "{{.DEPLOY_SCRIPT}}"
 
   deploy-hosted:
     # TO-DO: untested
@@ -56,21 +69,22 @@ tasks:
       - sh: if [ -z "$(ls -A ../abis)" ]; then exit -1; fi
         msg: "ERROR: No ABIs found. Run 'task gen-abi' first."
 
-  destroy-hardhat:
-    desc: "Tear down the deployed Hardhat node."
-    dir: docker/
-    cmds:
-      - docker-compose -f docker-compose.hardhat.yml down --volumes
-
   docker-build:
-    desc: "Build subgraph Docker image on defined node version base (default: 16-slim)."
+    desc: "Build Docker images based on defined node version base (default: 16-slim)."
     cmds:
-      - docker build -t {{.SET_IMAGE_NAME}}:node-${NODE_VER} -f docker/Dockerfile --build-arg NODE_VER=$NODE_VER .
-    env:
-      NODE_VER: "{{.NODE_VER}}"
+      - docker build -t {{.SET_IMAGE_NAME}}:node-{{.NODE_VER}} -f docker/Dockerfile.base --build-arg NODE_VER={{.NODE_VER}} .
+      - docker build -t {{.HARDHAT_IMAGE_NAME}}:node-{{.NODE_VER}} -f docker/Dockerfile.hardhat --build-arg SET_IMAGE_NAME={{.SET_IMAGE_NAME}} --build-arg NODE_VER={{.NODE_VER}} .
 
   gen-abi:
     desc: "Pull latest Set Protocol ABIs into the build environment."
     cmds:
       # Note the following command requires node ver 16 or below (only 12 and 16 tested working)
       - docker run --rm -v $(pwd)/abis:/subgraph/abis -v $(pwd)/scripts:/subgraph/scripts -w /subgraph {{.SET_IMAGE_NAME}}:node-{{.NODE_VER}} bash scripts/update-abis.sh
+
+  gen-schema:
+    desc: "Generate schema intermediate artifacts for development without a full deploy."
+    cmds:
+      - rm -rf generated/ build/
+      - docker run --rm -e NETWORK_NAME={{.NETWORK_LOCAL}} -v $(pwd)/:/subgraph -v setprotocol-subgraph-node_modules:/subgraph/node_modules -w /subgraph {{.SET_IMAGE_NAME}}:node-{{.NODE_VER}} sh scripts/gen-schema.sh
+    vars:
+      NETWORK_NAME: "{{.NETWORK_LOCAL}}"

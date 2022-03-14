@@ -18,16 +18,24 @@ dataSources:
       language: wasm/assemblyscript
       file: ./src/mappings/SetTokenCreator.ts
       entities:
-        - SetToken
         - Manager
+        - Protocol
+        - SetToken
       abis:
         - name: SetTokenCreator
           file: ./abis/SetTokenCreator.json
-        - name: SetToken
-          file: ./abis/SetToken.json
       eventHandlers:
         - event: SetTokenCreated(indexed address,address,string,string)
           handler: handleSetTokenCreated
+
+  # [NOTE] The following set of dataSources reference deprecated SetTokenCreator
+  # contracts on Ethereum mainnet tied to deployed SetTokens. When deploying
+  # to Ethereum mainnet (and staging), the following smart contracts must be
+  # uncommented and executed.
+  # [TO-DO]
+  #   - can single contract definition support multiple source addresses?
+  #   - can we separate this logic to auto-deploy as required?
+
   # - name: SetTokenCreator-deprecated-staging-mainnet
   #   kind: ethereum/contract
   #   network: '{{network}}'
@@ -37,7 +45,7 @@ dataSources:
   #     startBlock: {{startBlock}}
   #   mapping:
   #     kind: ethereum/events
-  #     apiVersion: 0.0.6
+  #     apiVersion: 0.0.4
   #     language: wasm/assemblyscript
   #     file: ./src/mappings/SetTokenCreator.ts
   #     entities:
@@ -64,7 +72,7 @@ dataSources:
   #     startBlock: {{startBlock}}
   #   mapping:
   #     kind: ethereum/events
-  #     apiVersion: 0.0.6
+  #     apiVersion: 0.0.4
   #     language: wasm/assemblyscript
   #     file: ./src/mappings/SetTokenCreator.ts
   #     entities:
@@ -91,7 +99,7 @@ dataSources:
   #     startBlock: {{startBlock}}
   #   mapping:
   #     kind: ethereum/events
-  #     apiVersion: 0.0.6
+  #     apiVersion: 0.0.4
   #     language: wasm/assemblyscript
   #     file: ./src/mappings/SetTokenCreator.ts
   #     entities:
@@ -118,7 +126,7 @@ dataSources:
   #     startBlock: {{startBlock}}
   #   mapping:
   #     kind: ethereum/events
-  #     apiVersion: 0.0.6
+  #     apiVersion: 0.0.4
   #     language: wasm/assemblyscript
   #     file: ./src/mappings/SetTokenCreator.ts
   #     entities:
@@ -136,6 +144,7 @@ dataSources:
   #     eventHandlers:
   #       - event: SetTokenCreated(indexed address,address,string,string)
   #         handler: handleSetTokenCreated
+
 templates:
   - name: SetToken
     kind: ethereum/contract
@@ -148,22 +157,54 @@ templates:
       language: wasm/assemblyscript
       file: ./src/mappings/SetToken.ts
       entities:
-        - Manager
+        - ManagerUpdate
       abis:
         - name: SetToken
           file: ./abis/SetToken.json
-        - name: StreamingFeeModule
-          file: ./abis/StreamingFeeModule.json
+      eventHandlers:
+        - event: ModuleInitialized(indexed address)
+          handler: handleModuleInitialized
+        - event: ManagerEdited(address,address)
+          handler: handleManagerEdited
+  - name: TradeModule
+    kind: ethereum/contract
+    network: '{{network}}'
+    source:
+      abi: TradeModule
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/mappings/TradeModule.ts
+      entities:
+        - RebalanceTrade
+      abis:
         - name: TradeModule
           file: ./abis/TradeModule.json
       eventHandlers:
-        - event: ManagerEdited(address,address)
-          handler: handleManagerEdited
-        # - event: FeeActualized(address indexed,uint256,uint256)
-        #   handler: handleFeeActualized
-        # - event: StreamingFeeUpdated(address indexed,uint256)
-        #   handler: handleStreamingFeeUpdated
-        # - event: FeeRecipientUpdated(address indexed,address)
-        #   handler: handleFeeRecipientUpdated
-        # - event: ComponentExchanged(ISetToken indexed,address indexed,address indexed,IExchangeAdapter,uint256,uint256,uint256)
-        #   handler: handleComponentExchanged
+        - event: ComponentExchanged(indexed address,indexed address,indexed address,address,uint256,uint256,uint256)
+          handler: handleComponentExchanged
+  - name: StreamingFeeModule
+    kind: ethereum/contract
+    network: '{{network}}'
+    source:
+      abi: StreamingFeeModule
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/mappings/StreamingFeeModule.ts
+      entities:
+        - StreamingFeeAccrue
+        - StreamingFeeUpdate
+        - FeeRecipientUpdate
+      abis:
+        - name: StreamingFeeModule
+          file: ./abis/StreamingFeeModule.json
+      eventHandlers:
+        - event: FeeActualized(indexed address,uint256,uint256)
+          handler: handleFeeActualized
+        - event: StreamingFeeUpdated(indexed address,uint256)
+          handler: handleStreamingFeeUpdated
+        - event: FeeRecipientUpdated(indexed address,address)
+          handler: handleFeeRecipientUpdated
