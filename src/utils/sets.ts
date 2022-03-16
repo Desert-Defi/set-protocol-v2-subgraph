@@ -15,7 +15,7 @@ export namespace sets {
    * 
    * @param event
    */
-   export function createModuleTemplate(event: ModuleInitializedEvent): void {
+  export function createModuleTemplate(event: ModuleInitializedEvent): void {
     // NOTE: Ideally, this would only trigger the appropriate template creation
     //       based on the module being initialised; however, as we cannot
     //       fingerprint the calling module from within the subgraph, it
@@ -29,7 +29,7 @@ export namespace sets {
    * 
    * @param event
    */
-   export function createSetToken(event: SetTokenCreatedEvent): void {
+  export function createSetToken(event: SetTokenCreatedEvent): void {
     let id = event.params._setToken.toHexString();
     let set = new SetToken(id);
     set.protocol = constants.PROTOCOL_VERSION;
@@ -47,7 +47,7 @@ export namespace sets {
    * @param id  SetToken address
    * @returns   SetToken entity
    */
-   export function getSetToken(id: string): SetToken {
+  export function getSetToken(id: string): SetToken {
     let set = SetToken.load(id);
     // TO-DO: Does this need better failure logic?
     if (!set) log.critical("SetToken not found for {}", [id]);

@@ -26,7 +26,7 @@ export namespace managers {
    * @param id  manager address
    * @returns   manager entity
    */
-   function createNewManager(id: string): Manager {
+  function createNewManager(id: string): Manager {
     let manager = new Manager(id);
     manager.address = id; // NOTE: The manager.address field will be deprecated on new subgraph sync
     manager.protocol = constants.PROTOCOL_VERSION;
@@ -43,7 +43,7 @@ export namespace managers {
    * 
    * @param event
    */
-   export function update(event: ManagerEditedEvent): void {
+  export function update(event: ManagerEditedEvent): void {
     let set = sets.getSetToken(event.address.toHexString());
     let manager = getManager(event.params._newManager.toHexString());
     // Index the event

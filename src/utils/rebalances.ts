@@ -9,7 +9,7 @@ export namespace rebalances {
    * 
    * @param event
    */
-   export function addRebalanceTrade(event: ComponentExchangedEvent): void {
+  export function addRebalanceTrade(event: ComponentExchangedEvent): void {
     let set = sets.getSetToken(event.params._setToken.toHexString());
     // Index the event
     let id = event.transaction.hash.toHexString();

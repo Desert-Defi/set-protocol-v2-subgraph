@@ -33,10 +33,8 @@ if [ "${DEPLOYMENT}" = "local" ]; then
     echo "Deployment complete (press Ctrl+C to stop)"
 else
     echo "Deploy subgraph to Hosted Service on network '${NETWORK_NAME}'"
-    exit
-    # TO-DO: external deployments are untested
     # Authorize and deploy subgraph to Hosted Service
     npx graph auth "${GRAPH_NODE_IP}" "${ACCESS_TOKEN}"
     npx graph deploy -l "${SUBGRAPH_VERSION}" --product hosted-service "${GITHUB_REPO}/${GRAPH_NAME}"
-    echo "Deployment complete (press Ctrl+C to stop)"
+    echo "Deployment complete"
 fi
