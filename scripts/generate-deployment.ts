@@ -2,13 +2,13 @@
 // Specify networks in ../deployments.json
 // Usage: yarn run ts-node scripts/generate-deployment.ts <NETWORK_NAME>
 
-import handlebars from 'handlebars';
-import fs from 'fs';
-import path from 'path';
-import deployments from '../deployments.json';
+import handlebars from "handlebars";
+import fs from "fs";
+import path from "path";
+import deployments from "../deployments.json";
 
 const deploymentName = process.argv[2];
-if (!deploymentName) throw new Error('no deployment name provided');
+if (!deploymentName) throw new Error("no deployment name provided");
 
 // eslint-disable-next-line
 const deploymentData = (deployments as any)[deploymentName];
@@ -16,8 +16,8 @@ if (!deploymentData) throw new Error(`deployment ${deploymentName} not found`);
 
 console.log(`Generating deployment files for ${deploymentName}...`);
 
-const generatedDir = path.join(process.cwd(), 'generated');
-const templatesDir = path.join(process.cwd(), 'templates');
+const generatedDir = path.join(process.cwd(), "generated");
+const templatesDir = path.join(process.cwd(), "templates");
 
 function replace(templateFile: string, outputFile: string) {
   console.log(`Writing template ${templateFile} to ${outputFile}`);
@@ -32,11 +32,17 @@ if (!fs.existsSync(generatedDir)) {
 }
 
 // addresses.ts
-let input = path.join(templatesDir, 'addresses.ts');
-let output = path.join(generatedDir, 'addresses.ts');
+let input = path.join(templatesDir, "addresses.ts");
+let output = path.join(generatedDir, "addresses.ts");
 replace(input, output);
 
-// subgraph.yaml
-input = path.join(templatesDir, 'subgraph.yaml');
-output = path.join(process.cwd(), 'subgraph.yaml');
+// subgraph.yaml - select based on targeted network
+if (deploymentName == "mainnet") {
+  input = path.join(templatesDir, "subgraph.mainnet.yaml");
+} else if (deploymentName == "staging-mainnet") {
+  input = path.join(templatesDir, "subgraph.staging-mainnet.yaml");
+} else {
+  input = path.join(templatesDir, "subgraph.default.yaml");
+}
+output = path.join(process.cwd(), "subgraph.yaml");
 replace(input, output);

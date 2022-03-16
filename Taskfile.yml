@@ -89,6 +89,9 @@ tasks:
     desc: "Generate schema intermediate artifacts for development without a full deploy."
     cmds:
       - rm -rf generated/ build/
-      - docker run --rm -e NETWORK_NAME={{.NETWORK_LOCAL}} -v $(pwd)/:/subgraph -v setprotocol-subgraph-node_modules:/subgraph/node_modules -w /subgraph {{.SET_IMAGE_NAME}}:node-{{.NODE_VER}} sh scripts/gen-schema.sh
+      - docker run --rm -e NETWORK_NAME={{.NETWORK_NAME}} -v $(pwd)/:/subgraph -v setprotocol-subgraph-node_modules:/subgraph/node_modules -w /subgraph {{.SET_IMAGE_NAME}}:node-{{.NODE_VER}} sh scripts/gen-schema.sh
     vars:
-      NETWORK_NAME: "{{.NETWORK_LOCAL}}"
+      NETWORK_NAME:
+        sh: if [ "{{.CLI_ARGS}}" = "hosted" ]; then echo "{{.NETWORK_HOSTED}}"; else echo "{{.NETWORK_LOCAL}}"; fi
+    env:
+      NETWORK_NAME: "{{.NETWORK_NAME}}"

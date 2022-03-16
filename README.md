@@ -55,21 +55,24 @@ Indexer of Set Protocol v2 events. Built on [The Graph](https://thegraph.com/).
 
     Example query to run can be found in `test/sample-query.txt`
 
-### [TO-DO] External Deployment (Graph Hosted Service / Subgraph Studio)
+### External Deployment to Hosted Service
 
 1. Build the Set Protocol Docker base and hardhat images
 
     `task docker-build`
 
-1. Deploy hosted subgraph
+1. Deploy hosted subgraph to network specified by the `NETWORK_HOSTED` environment variable in dotenv
 
     `task deploy-hosted [-- SUBGRAPH_ACCESS_TOKEN]`
+
+### [TO-DO] External Deployment to Subgraph Studio
+
+TBD
 
 ## USAGE
 
 Available tasks for this project:
 
-<<<<<<< HEAD
 | COMMAND [OPTS]                             | DESCRIPTION |
 |--------------------------------------------|---------------------------------------------------------------------------------|
 | `clean [-- all\|subgraph\|hardhat]`        | Clean up local subgraph deployment; `all` arg additionally removes all volumes and the Hardhat node. |
@@ -78,18 +81,7 @@ Available tasks for this project:
 | `deploy-local [-- detach]`                 | Build and deploy subgraph on local network; `detach` runs container detached. |
 | `docker-build`                             | Build subgraph Docker image on defined node version base (default: 16-slim). |
 | `gen-abi`                                  | Pull latest Set Protocol ABIs into the build environment. |
-| `gen-schema`                               | Compile the subgraph schema but do not deploy the subgraph. |
-=======
-| COMMAND [OPTS]                       | DESCRIPTION |
-|--------------------------------------|---------------------------------------------------------------------------------|
-| `clean [-- all\|subgraph\|hardhat]`  | Clean up local subgraph deployment; `all` arg additionally removes all volumes and the Hardhat node. |
-| `deploy-hardhat -- /path/to/file.ts` | Deploy a local Hardhat node and run a test script. Must specify full path to file as task input argument. |
-| `deploy-hosted [-- detach]`          | Build and deploy subgraph on Hosted Service; `detach` runs container detached. |
-| `deploy-local [-- detach]`           | Build and deploy subgraph on local network; `detach` runs container detached. |
-| `docker-build`                       | Build subgraph Docker image on defined node version base (default: 16-slim). |
-| `gen-abi`                            | Pull latest Set Protocol ABIs into the build environment. |
-| `gen-schema`                         | Compile the subgraph schema but do not deploy the subgraph. |
->>>>>>> master
+| `gen-schema [-- hosted]`                   | Compile the subgraph schema but do not deploy the subgraph; default target subgraph network is hardhat. |
 
 ## [TO-DO] ADVANCED DEPLOYMENT GUIDES
 

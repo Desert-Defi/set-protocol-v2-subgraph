@@ -1,0 +1,139 @@
+# Updating comment here can help bump version for indexers to pick up changes ideally v1.0.0
+specVersion: 0.0.4
+description: Set Protocol V2
+repository: https://github.com/SetProtocol/set-protocol-v2-subgraph
+schema:
+  file: ./schema.graphql
+dataSources:
+  - name: SetTokenCreator
+    kind: ethereum/contract
+    network: '{{network}}'
+    source:
+      abi: SetTokenCreator
+      address: '{{SetTokenCreator}}'
+      startBlock: {{startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/mappings/SetTokenCreator.ts
+      entities:
+        - Manager
+        - Protocol
+        - SetToken
+      abis:
+        - name: SetTokenCreator
+          file: ./abis/SetTokenCreator.json
+      eventHandlers:
+        - event: SetTokenCreated(indexed address,address,string,string)
+          handler: handleSetTokenCreated
+
+  # [NOTE] The following set of dataSources reference deprecated SetTokenCreator
+  # contracts on Ethereum mainnet tied to deployed SetTokens.
+
+  - name: SetTokenCreator-deprecated-mainnet
+    kind: ethereum/contract
+    network: '{{network}}'
+    source:
+      abi: SetTokenCreator
+      address: '0x65d103A810099193c892a23d6b320cF3B9E30D46'
+      startBlock: {{startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/mappings/SetTokenCreator.ts
+      entities:
+        - Manager
+        - SetToken
+      abis:
+        - name: SetTokenCreator
+          file: ./abis/SetTokenCreator.json
+      eventHandlers:
+        - event: SetTokenCreated(indexed address,address,string,string)
+          handler: handleSetTokenCreated
+  - name: SetTokenCreator-deprecated-mainnet-2
+    kind: ethereum/contract
+    network: '{{network}}'
+    source:
+      abi: SetTokenCreator
+      address: '0x8cb9e7bdd78926933fc9d19f5f69fefc2b737087'
+      startBlock: {{startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/mappings/SetTokenCreator.ts
+      entities:
+        - Manager
+        - SetToken
+      abis:
+        - name: SetTokenCreator
+          file: ./abis/SetTokenCreator.json
+      eventHandlers:
+        - event: SetTokenCreated(indexed address,address,string,string)
+          handler: handleSetTokenCreated
+
+templates:
+  - name: SetToken
+    kind: ethereum/contract
+    network: '{{network}}'
+    source:
+      abi: SetToken
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/mappings/SetToken.ts
+      entities:
+        - ManagerUpdate
+      abis:
+        - name: SetToken
+          file: ./abis/SetToken.json
+      eventHandlers:
+        - event: ModuleInitialized(indexed address)
+          handler: handleModuleInitialized
+        - event: ManagerEdited(address,address)
+          handler: handleManagerEdited
+  - name: TradeModule
+    kind: ethereum/contract
+    network: '{{network}}'
+    source:
+      abi: TradeModule
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/mappings/TradeModule.ts
+      entities:
+        - RebalanceTrade
+      abis:
+        - name: TradeModule
+          file: ./abis/TradeModule.json
+      eventHandlers:
+        - event: ComponentExchanged(indexed address,indexed address,indexed address,address,uint256,uint256,uint256)
+          handler: handleComponentExchanged
+  - name: StreamingFeeModule
+    kind: ethereum/contract
+    network: '{{network}}'
+    source:
+      abi: StreamingFeeModule
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/mappings/StreamingFeeModule.ts
+      entities:
+        - StreamingFeeAccrue
+        - StreamingFeeUpdate
+        - FeeRecipientUpdate
+      abis:
+        - name: StreamingFeeModule
+          file: ./abis/StreamingFeeModule.json
+      eventHandlers:
+        - event: FeeActualized(indexed address,uint256,uint256)
+          handler: handleFeeActualized
+        - event: StreamingFeeUpdated(indexed address,uint256)
+          handler: handleStreamingFeeUpdated
+        - event: FeeRecipientUpdated(indexed address,address)
+          handler: handleFeeRecipientUpdated
