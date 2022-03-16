@@ -11,8 +11,11 @@ pids
 *.seed
 *.pid.lock
 
-# Dependency directories
+# Dependency files and directories
 node_modules/
+# These should be explicitly committed if we want to lock versions
+package.json
+package-lock.json
 
 # Yarn Integrity file
 .yarn-integrity
@@ -39,3 +42,9 @@ cache/
 # Generated subgraph manifest and addresses
 subgraph.yaml
 addresses.ts
+
+# User dotenv
+docker/custom.env
+
+# Non-explicitly-committed tests
+test/
