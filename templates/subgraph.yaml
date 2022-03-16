@@ -19,6 +19,7 @@ dataSources:
       file: ./src/mappings/SetTokenCreator.ts
       entities:
         - Manager
+        - Protocol
         - SetToken
       abis:
         - name: SetTokenCreator
@@ -45,7 +46,7 @@ dataSources:
   #     startBlock: {{startBlock}}
   #   mapping:
   #     kind: ethereum/events
-  #     apiVersion: 0.0.6
+  #     apiVersion: 0.0.4
   #     language: wasm/assemblyscript
   #     file: ./src/mappings/SetTokenCreator.ts
   #     entities:
@@ -66,7 +67,7 @@ dataSources:
   #     startBlock: {{startBlock}}
   #   mapping:
   #     kind: ethereum/events
-  #     apiVersion: 0.0.6
+  #     apiVersion: 0.0.4
   #     language: wasm/assemblyscript
   #     file: ./src/mappings/SetTokenCreator.ts
   #     entities:
@@ -88,7 +89,7 @@ dataSources:
   #     startBlock: {{startBlock}}
   #   mapping:
   #     kind: ethereum/events
-  #     apiVersion: 0.0.6
+  #     apiVersion: 0.0.4
   #     language: wasm/assemblyscript
   #     file: ./src/mappings/SetTokenCreator.ts
   #     entities:
@@ -109,7 +110,7 @@ dataSources:
   #     startBlock: {{startBlock}}
   #   mapping:
   #     kind: ethereum/events
-  #     apiVersion: 0.0.6
+  #     apiVersion: 0.0.4
   #     language: wasm/assemblyscript
   #     file: ./src/mappings/SetTokenCreator.ts
   #     entities:

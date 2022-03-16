@@ -69,6 +69,7 @@ Indexer of Set Protocol v2 events. Built on [The Graph](https://thegraph.com/).
 
 Available tasks for this project:
 
+<<<<<<< HEAD
 | COMMAND [OPTS]                             | DESCRIPTION |
 |--------------------------------------------|---------------------------------------------------------------------------------|
 | `clean [-- all\|subgraph\|hardhat]`        | Clean up local subgraph deployment; `all` arg additionally removes all volumes and the Hardhat node. |
@@ -78,6 +79,17 @@ Available tasks for this project:
 | `docker-build`                             | Build subgraph Docker image on defined node version base (default: 16-slim). |
 | `gen-abi`                                  | Pull latest Set Protocol ABIs into the build environment. |
 | `gen-schema`                               | Compile the subgraph schema but do not deploy the subgraph. |
+=======
+| COMMAND [OPTS]                       | DESCRIPTION |
+|--------------------------------------|---------------------------------------------------------------------------------|
+| `clean [-- all\|subgraph\|hardhat]`  | Clean up local subgraph deployment; `all` arg additionally removes all volumes and the Hardhat node. |
+| `deploy-hardhat -- /path/to/file.ts` | Deploy a local Hardhat node and run a test script. Must specify full path to file as task input argument. |
+| `deploy-hosted [-- detach]`          | Build and deploy subgraph on Hosted Service; `detach` runs container detached. |
+| `deploy-local [-- detach]`           | Build and deploy subgraph on local network; `detach` runs container detached. |
+| `docker-build`                       | Build subgraph Docker image on defined node version base (default: 16-slim). |
+| `gen-abi`                            | Pull latest Set Protocol ABIs into the build environment. |
+| `gen-schema`                         | Compile the subgraph schema but do not deploy the subgraph. |
+>>>>>>> master
 
 ## [TO-DO] ADVANCED DEPLOYMENT GUIDES
 
