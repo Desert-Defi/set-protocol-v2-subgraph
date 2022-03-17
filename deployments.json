@@ -1,24 +1,19 @@
 {
   "mainnet": {
     "network": "mainnet",
+    "subgraphName": "set-protocol-v2",
     "startBlock": 10830495,
     "SetTokenCreator": "0xef72d3278dc3eba6dc2614965308d1435ffd748a"
   },
-  "hardhat": {
-    "network": "hardhat",
-    "startBlock": 0,
-    "Controller": "0x1dc4c1cefef38a777b15aa20260a54e584b16c48",
-    "SetTokenCreator": "0x8d61158a366019ac78db4149d75fff9dda51160d",
-    "IntegrationRegistry": "0xb69e673309512a9d726f87304c6984054f87a93b",
-    "PriceOracle": "0x131855dda0aaff096f6854854c55a4debf61077a",
-    "SetValuer": "0xe86bb98fcf9bff3512c74589b78fb168200cc546",
-    "BasicIssuanceModule": "0x1d7022f5b17d2f8b695918fb48fa1089c9f85401",
-    "StreamingFeeModule": "0xdc688d29394a3f1e6f1e5100862776691afaf3d2",
-    "NavIssuanceModule": "0xb7c9b454221e26880eb9c3101b3295ca7d8279ef",
-    "TradeModule": "0x59adefa01843c627ba5d6aa350292b4b7ccae67a"
+  "staging-mainnet": {
+    "network": "mainnet",
+    "subgraphName": "set-protocol-v2-staging",
+    "startBlock": 10819027,
+    "SetTokenCreator": "0x026d25C2B70Ddbb8D759f1f38d6fD6e23b60B6DF"
   },
   "matic": {
     "network": "matic",
+    "subgraphName": "set-protocol-v2-matic",
     "startBlock": 0,
     "Controller": "0x75FBBDEAfE23a48c0736B2731b956b7a03aDcfB2",
     "SetTokenCreator": "0x14f0321be5e581abF9d5BC76260bf015Dc04C53d",
@@ -29,34 +24,48 @@
     "StreamingFeeModule": "0x8440f6a2c42118bed0D6E6A89Bf170ffd13e21c0",
     "TradeModule": "0xd04AabadEd11e92Fefcd92eEdbBC81b184CdAc82"
   },
-  "staging-mainnet": {
-    "network": "mainnet",
-    "startBlock": 10819027,
-    "SetTokenCreator": "0x026d25C2B70Ddbb8D759f1f38d6fD6e23b60B6DF"
-  },
   "matic-staging-mainnet": {
     "network": "matic",
+    "subgraphName": "set-protocol-v2-matic-staging",
     "startBlock": 16655167,
     "SetTokenCreator": "0x2907206b253665eef4776b8e684d61afd957b974"
   },
   "arbitrum-staging-mainnet": {
     "network": "arbitrum-one",
+    "subgraphName": "set-protocol-v2-arbitrum-staging",
     "startBlock": 1168154,
     "SetTokenCreator": "0xCF786472d37f557A80fE6daFF6f2672bfDa728a3"
   },
   "avalanche-staging-mainnet": {
     "network": "avalanche",
+    "subgraphName": "set-protocol-v2-avax-staging",
     "startBlock": 6097319,
     "SetTokenCreator": "0xE99447aBbD5A7730b26D2D16fCcB2086319e4bC3"
   },
+  "optimism-mainnet": {
+    "network": "optimism",
+    "subgraphName": "set-protocol-v2-optimism",
+    "startBlock": 900529,
+    "SetTokenCreator": "0x0bc84D31f11D90156c30B4f19509Ede969A0B840"
+  },
   "optimism-staging-mainnet": {
     "network": "optimism",
+    "subgraphName": "set-protocol-v2-optimism-staging",
     "startBlock": 593299,
     "SetTokenCreator": "0xCF786472d37f557A80fE6daFF6f2672bfDa728a3"
   },
-  "optimism-mainnet": {
-    "network": "optimism",
-    "startBlock": 900529,
-    "SetTokenCreator": "0x0bc84D31f11D90156c30B4f19509Ede969A0B840"
+  "hardhat": {
+    "network": "hardhat",
+    "subgraphName": "set-protocol-v2",
+    "startBlock": 0,
+    "Controller": "0x1dc4c1cefef38a777b15aa20260a54e584b16c48",
+    "SetTokenCreator": "0x8d61158a366019ac78db4149d75fff9dda51160d",
+    "IntegrationRegistry": "0xb69e673309512a9d726f87304c6984054f87a93b",
+    "PriceOracle": "0x131855dda0aaff096f6854854c55a4debf61077a",
+    "SetValuer": "0xe86bb98fcf9bff3512c74589b78fb168200cc546",
+    "BasicIssuanceModule": "0x1d7022f5b17d2f8b695918fb48fa1089c9f85401",
+    "StreamingFeeModule": "0xdc688d29394a3f1e6f1e5100862776691afaf3d2",
+    "NavIssuanceModule": "0xb7c9b454221e26880eb9c3101b3295ca7d8279ef",
+    "TradeModule": "0x59adefa01843c627ba5d6aa350292b4b7ccae67a"
   }
 }

@@ -12,5 +12,5 @@ ARG NODE_VER=16
 FROM node:${NODE_VER}-slim as base
 
 RUN apt update \
-    && apt install -y python3 make gcc g++ openssl git libsecret-1-dev \
+    && apt install -y python3 make gcc g++ openssl git libsecret-1-dev jq \
     && rm -rf /var/lib/apt/lists/* /tmp/*

@@ -65,7 +65,7 @@ tasks:
         sh: if [ "{{.CLI_ARGS}}" = "detach" ]; then echo "-d"; else echo ""; fi
     env:
       DEPLOYMENT: "local"
-      ACCESS_TOKEN: "{{.ACCESS_TOKEN}}"
+      ACCESS_TOKEN: "{{.LOCAL_ACCESS_TOKEN}}"
       IPFS_IP: "{{.IPFS_CONTAINER}}:{{.IPFS_PORT}}"
       GRAPH_NODE_IP: "{{.GRAPH_NODE_CONTAINER}}:{{.GRAPH_NODE_PORT}}"
       NETWORK_NAME: "{{.NETWORK_LOCAL}}"

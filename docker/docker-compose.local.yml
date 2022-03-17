@@ -41,11 +41,11 @@ services:
       DEPLOYMENT: ${DEPLOYMENT:-"local"}
       IPFS_IP: ${IPFS_IP:-""}
       GRAPH_NODE_IP: ${GRAPH_NODE_IP:-""}
-      ACCESS_TOKEN: ${ACCESS_TOKEN:-""}
+      ACCESS_TOKEN: ${ACCESS_TOKEN:-"test"}
       SUBGRAPH_VERSION: ${SUBGRAPH_VERSION:-""}
       NETWORK_NAME: ${NETWORK_NAME:-""}
-      GITHUB_REPO: ${GITHUB_REPO:-""}
-      GRAPH_NAME: ${GRAPH_NAME:-""}
+      GITHUB_REPO: ${GITHUB_REPO:-"SetProtocol"}
+      SUBGRAPH_NAME: ${SUBGRAPH_NAME}
     volumes:
       - ../:/subgraph
       - setprotocol-subgraph-node_modules:/subgraph/node_modules

@@ -11,8 +11,8 @@ services:
       ACCESS_TOKEN: ${ACCESS_TOKEN}
       SUBGRAPH_VERSION: ${SUBGRAPH_VERSION:-""}
       NETWORK_NAME: ${NETWORK_NAME:-""}
-      GITHUB_REPO: ${GITHUB_REPO:-""}
-      GRAPH_NAME: ${GRAPH_NAME:-""}
+      GITHUB_REPO: ${GITHUB_REPO:-"justinkchen"}
+      SUBGRAPH_NAME: ${SUBGRAPH_NAME}
     volumes:
       - ../:/subgraph
       - setprotocol-subgraph-node_modules:/subgraph/node_modules
